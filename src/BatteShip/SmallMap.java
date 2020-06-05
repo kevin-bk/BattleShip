@@ -10,12 +10,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class Map extends JPanel {
+public class SmallMap extends JPanel {
 	public JButton mapPiece[][];
 	public boolean isShip[][];
 	public ImageIcon icon;
 
-	public Map(int w, int h) {
+	public SmallMap(int w, int h) {
 		super();
 		mapPiece = new JButton[11][11];
 		isShip = new boolean[11][11];
