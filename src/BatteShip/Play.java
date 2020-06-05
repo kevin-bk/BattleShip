@@ -26,15 +26,15 @@ public class Play extends JFrame implements ActionListener {
 
 	private ImageIcon miss; // bắn trượt
 	private ImageIcon hit; // bắn trúng
-	private ImageIcon die; // tàu bị phá hoàn toàn
+	private ImageIcon dead; // tàu bị phá hoàn toàn
 
-	public Play(int w, int h) {
+	public Play(int w, int h, SmallMap player) {
 		super("Batte Ship");
 		this.setSize(w, h);
 		cn = new Container();
 		// add map và thông tin
 		panel1 = new JPanel();
-		playerMap = new SmallMap(w / 2, h - 130);
+		playerMap = player;
 		computerMap = new SmallMap(w / 2, h - 130);
 		panel1.setLayout(new GridLayout(1, 2, 20, 10));
 		panel1.add(computerMap);
@@ -55,6 +55,8 @@ public class Play extends JFrame implements ActionListener {
 		
 		// tạo image icon 
 		hit = new ImageIcon(loadImage("src\\img\\hit.png",w/20,56));
+		miss = new ImageIcon(loadImage("src\\img\\miss.png",w/20,56));
+		dead = new ImageIcon(loadImage("src\\img\\Dead.png",w/20,56));
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
@@ -73,10 +75,6 @@ public class Play extends JFrame implements ActionListener {
 		}
 	}
 
-	public static void main(String args[]) {
-		new Play(1140, 690);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -85,12 +83,15 @@ public class Play extends JFrame implements ActionListener {
 			int i = x / 100;
 			int j = x % 100;
 //			JOptionPane.showMessageDialog(this, "clicked PlayerMap" + i + " " + j + " " + x);
-			playerMap.mapPiece[i][j].setIcon(hit);
+//			playerMap.mapPiece[i][j].setIcon(hit);
+			if (playerMap.isShip[i][j]) playerMap.mapPiece[i][j].setIcon(hit);
+			else playerMap.mapPiece[i][j].setIcon(dead);
 		} else { // computerMap
 			int i = x / 10000;
 			int j = x % 10000;
 //			JOptionPane.showMessageDialog(this, "clicked computerMap" + i + " " + j + " " + x);
-			computerMap.mapPiece[i][j].setIcon(hit);
+			if (computerMap.isShip[i][j]) computerMap.mapPiece[i][j].setIcon(hit);
+			else computerMap.mapPiece[i][j].setIcon(dead);
 		}
 
 	}

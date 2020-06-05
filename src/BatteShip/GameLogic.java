@@ -36,20 +36,20 @@ public class GameLogic implements ActionListener {
 		frame.setVisible(true);
 	}
 	
+	public void setRandom() {
+		for (int i = 1; i <= 10; i++) {
+			for (int j = 1; j <= 10; j++) {
+				if (i % 2 == 0) playerMap.isShip[i][j] = true;
+			}
+		}
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		menu.setVisible(false);
-//		frame.remove(menu);
-//
-//		playerMap.setVisible(true);
-//		computerMap.setVisible(true);
-//
-//		frame.add(playerMap);
-//		frame.add(computerMap);
-//		frame.setLayout(new GridLayout(1,2,40,10));
+		
 		frame.setVisible(false);
-		new Play(1120,680);
+		setRandom();
+		new Play(1120,680,playerMap);
 	}
 	
 	public static void main(String args[]) {
