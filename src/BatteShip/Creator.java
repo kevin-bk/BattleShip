@@ -286,7 +286,7 @@ public class Creator extends JFrame implements MouseListener, MouseMotionListene
 			JLabel lb = new JLabel();
 			lb.setIcon(new ImageIcon(shipArray[tmp].getShipRorate()));
 			lb.setSize(50, leng * 50);
-			for (int t = 1; i < leng; t++) {
+			for (int t = 1; t < leng; t++) {
 				M[i][j + t] = true;
 				M[i + t][j] = false;
 			}
