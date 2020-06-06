@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -27,7 +29,12 @@ public class Play extends Container implements ActionListener {
 	private ImageIcon miss; // bắn trượt
 	private ImageIcon hit; // bắn trúng
 	private ImageIcon dead; // tàu bị phá hoàn toàn
-
+	
+	private static int playerHit, computerHit;	// số điểm bắn trúng hiện tại
+	private static int sumPoint;		// tổng số điểm ship trên mỗi map
+	private static boolean isPlayer;	// turn của player hay của computer
+	private static boolean[][] markP,markC;	// markP : đánh dấu điểm đã bắn trên computerMap, ngược lại với markC
+	
 	public Play(int w, int h, SmallMap player, SmallMap computer) {
 		super();
 
@@ -46,7 +53,7 @@ public class Play extends Container implements ActionListener {
 		turn = new JLabel("Player Turn");
 		panel2.add(turn);
 		panel2.setSize(w, 120);
-		addAction();
+		addAction();		//  tạo listener trên button
 
 		this.add(panel2);
 		this.add(panel1, "North");
@@ -57,15 +64,52 @@ public class Play extends Container implements ActionListener {
 		miss = new ImageIcon(loadImage("src\\img\\miss.png",w/20,56));
 		dead = new ImageIcon(loadImage("src\\img\\Dead.png",w/20,56));
 		
+		init();
+//		play();
 	}
 
+	
+	private void init() {
+		int cnt = 0;
+		markP = new boolean[11][11];
+		markC = new boolean[11][11];
+		for (int i = 1; i <= 10; i++) {
+			for (int j = 1; j <= 10; j++) {
+				if (playerMap.isShip[i][j]) cnt++;
+				markP[i][j] = false;
+				markC[i][j] = false;
+			}
+		}
+		sumPoint = cnt;
+		playerHit = 0;
+		computerHit = 0;
+		isPlayer = true;
+	}
+	
+	private void shot(int i, int j){
+		if (playerMap.isShip[i][j]) {
+			playerMap.mapPiece[i][j].setIcon(hit);
+			computerHit++;
+		}
+		else playerMap.mapPiece[i][j].setIcon(miss);
+	}
+	
+	private void hitRandom()  {
+		if (isPlayer) return;
+		Random rd = new Random();
+		int i = rd.nextInt(10) + 1;
+		int j = rd.nextInt(10) + 1;
+		if (!markC[i][j]) {
+			 shot(i,j);
+			 isPlayer = true;
+		}
+		else hitRandom();
+	}
+	
 	private void addAction() {
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
-				playerMap.mapPiece[i][j].setActionCommand("" + (i * 100 + j));
-				playerMap.mapPiece[i][j].addActionListener(this);
-
-				computerMap.mapPiece[i][j].setActionCommand("" + (i * 10000 + j));
+				computerMap.mapPiece[i][j].setActionCommand("" + (i * 100 + j));
 				computerMap.mapPiece[i][j].addActionListener(this);
 			}
 		}
@@ -74,23 +118,26 @@ public class Play extends Container implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		if (!isPlayer) return;
 		int x = Integer.parseInt(e.getActionCommand());
-		if (x < 2000) { // playerMap
-			int i = x / 100;
-			int j = x % 100;
-//			JOptionPane.showMessageDialog(this, "clicked PlayerMap" + i + " " + j + " " + x);
-//			playerMap.mapPiece[i][j].setIcon(hit);
-			if (playerMap.isShip[i][j]) playerMap.mapPiece[i][j].setIcon(hit);
-			else playerMap.mapPiece[i][j].setIcon(miss);
-		} else { // computerMap
-			int i = x / 10000;
-			int j = x % 10000;
-//			JOptionPane.showMessageDialog(this, "clicked computerMap" + i + " " + j + " " + x);
-			if (computerMap.isShip[i][j]) computerMap.mapPiece[i][j].setIcon(hit);
-			else computerMap.mapPiece[i][j].setIcon(miss);
+		int i = x/100;
+		int j = x % 100;
+		if (markP[i][j]) return;
+		if (computerMap.isShip[i][j]) {
+			computerMap.mapPiece[i][j].setIcon(hit);
+			playerHit++;
 		}
-
+		else computerMap.mapPiece[i][j].setIcon(miss);
+		isPlayer = false;
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		hitRandom();
 	}
+
 	
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
