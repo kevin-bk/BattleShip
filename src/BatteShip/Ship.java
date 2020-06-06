@@ -7,19 +7,33 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 public class Ship {
-	public Image ship;
+	public Image ship;	// ảnh tàu nằm ngang
+	public Image shipRotate;
 	
 	public Ship(int length, int w, int h) {
 //		String s = "src\\img\\" + name + ".png";
 //		ship = loadImage(s,w,h);
-		if (length == 3) ship = loadImage("src\\img\\3.png",w,h);
-		if (length == 2) ship = loadImage("src\\img\\2.png",w,h);
-		if (length == 1) ship = loadImage("src\\img\\1.png",w,h);
+		if (length == 3) {
+			ship = loadImage("src\\img\\3.png",w,h);
+			shipRotate = loadImage("src\\img\\3r.png",h,w);
+		}
+		if (length == 2) {
+			ship = loadImage("src\\img\\2.png",w,h);
+			shipRotate = loadImage("src\\img\\2r.png",h,w);
+		}
+		if (length == 1) {
+			ship = loadImage("src\\img\\1.png",w,h);
+			shipRotate = loadImage("src\\img\\1r.png",h,w);
+		}
 	}
 	
 	
 	public Image getShip() {
 		return this.ship;
+	}
+	
+	public Image getShipRorate() {
+		return this.shipRotate;
 	}
 	
 	
