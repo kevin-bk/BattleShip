@@ -25,7 +25,7 @@ public class SmallMap extends JPanel {
 		this.setLayout(new GridLayout(10, 10)); // tạo GridLayout cho Map
 
 		// load ảnh
-		icon = new ImageIcon(loadImage("src\\img\\piece.png", w / 10, h / 10));
+		icon = new ImageIcon(loadImage("src\\img\\mappp.png", w / 10, h / 10));
 
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {

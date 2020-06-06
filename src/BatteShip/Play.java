@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Play extends JFrame implements ActionListener {
+public class Play extends Container implements ActionListener {
 	public SmallMap playerMap; // bản đồ của người chơi -> máy bắn trên này
 	public SmallMap computerMap; // bản đồ của computer -> người chơi bắn trên này
 	public JPanel panel1; // panel1 chứa 2 bản đồ
@@ -29,9 +29,10 @@ public class Play extends JFrame implements ActionListener {
 	private ImageIcon dead; // tàu bị phá hoàn toàn
 
 	public Play(int w, int h, SmallMap player) {
-		super("Batte Ship");
-		this.setSize(w, h);
-		cn = new Container();
+//		super("Batte Ship");
+		super();
+//		this.setSize(w, h);
+//		cn = new Container();
 		// add map và thông tin
 		panel1 = new JPanel();
 		playerMap = player;
@@ -48,19 +49,19 @@ public class Play extends JFrame implements ActionListener {
 		panel2.setSize(w, 120);
 		addAction();
 
-		cn.add(panel2);
-		cn.add(panel1, "North");
-		cn.setSize(w, h);
-		this.add(cn);
+		this.add(panel2);
+		this.add(panel1, "North");
+		this.setSize(w, h);
+//		this.add(cn);
 		
 		// tạo image icon 
 		hit = new ImageIcon(loadImage("src\\img\\hit.png",w/20,56));
 		miss = new ImageIcon(loadImage("src\\img\\miss.png",w/20,56));
 		dead = new ImageIcon(loadImage("src\\img\\Dead.png",w/20,56));
 		
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
+//		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		this.setLocationRelativeTo(null);
+//		this.setVisible(true);
 	}
 
 	private void addAction() {

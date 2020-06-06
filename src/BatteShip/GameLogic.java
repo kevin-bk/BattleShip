@@ -1,6 +1,7 @@
 package BatteShip;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,9 +48,13 @@ public class GameLogic implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		frame.setVisible(false);
+//		frame.setVisible(false);
+		menu.setVisible(false);
+		frame.remove(menu);
+		
 		setRandom();
-		new Play(1120,680,playerMap);
+		Container cn = new Play(1120,680,playerMap);
+		frame.add(cn);
 	}
 	
 	public static void main(String args[]) {
