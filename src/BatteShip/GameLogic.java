@@ -14,14 +14,15 @@ public class GameLogic implements ActionListener {
 	private SmallMap computerMap;
 	private MainMenu menu;
 	private JFrame frame;
+	private Creator creator;
 	
 	public GameLogic(int w, int h) {
-		frame = new JFrame("Battle Ship") {
-			
-		};
-		
+		frame = new JFrame("Battle Ship") ;
 		frame.setSize(w, h);
-//		this.setBackground(Color.blue);
+		
+		creator = new Creator(1120,690,3,3,3);
+		creator.frame.setVisible(false);
+		
 		menu = new MainMenu(w,h);
 		playerMap = new SmallMap(w/2,h);
 		computerMap = new SmallMap(w/2,h);
@@ -51,14 +52,12 @@ public class GameLogic implements ActionListener {
 //		frame.setVisible(false);
 		menu.setVisible(false);
 		frame.remove(menu);
-		
-		setRandom();
-		Container cn = new Play(1120,680,playerMap);
-		frame.add(cn);
+		frame.setVisible(false);
+		creator.frame.setVisible(true);
 	}
 	
 	public static void main(String args[]) {
-		new GameLogic(1140,690);
+		new GameLogic(1120,690);
 	}
 
 }

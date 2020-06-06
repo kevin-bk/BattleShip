@@ -28,15 +28,14 @@ public class Play extends Container implements ActionListener {
 	private ImageIcon hit; // bắn trúng
 	private ImageIcon dead; // tàu bị phá hoàn toàn
 
-	public Play(int w, int h, SmallMap player) {
-//		super("Batte Ship");
+	public Play(int w, int h, SmallMap player, SmallMap computer) {
 		super();
-//		this.setSize(w, h);
-//		cn = new Container();
+
 		// add map và thông tin
 		panel1 = new JPanel();
 		playerMap = player;
-		computerMap = new SmallMap(w / 2, h - 130);
+		computerMap = computer;
+		
 		panel1.setLayout(new GridLayout(1, 2, 20, 10));
 		panel1.add(computerMap);
 		panel1.add(playerMap);
@@ -52,16 +51,12 @@ public class Play extends Container implements ActionListener {
 		this.add(panel2);
 		this.add(panel1, "North");
 		this.setSize(w, h);
-//		this.add(cn);
 		
 		// tạo image icon 
 		hit = new ImageIcon(loadImage("src\\img\\hit.png",w/20,56));
 		miss = new ImageIcon(loadImage("src\\img\\miss.png",w/20,56));
 		dead = new ImageIcon(loadImage("src\\img\\Dead.png",w/20,56));
 		
-//		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		this.setLocationRelativeTo(null);
-//		this.setVisible(true);
 	}
 
 	private void addAction() {
@@ -86,13 +81,13 @@ public class Play extends Container implements ActionListener {
 //			JOptionPane.showMessageDialog(this, "clicked PlayerMap" + i + " " + j + " " + x);
 //			playerMap.mapPiece[i][j].setIcon(hit);
 			if (playerMap.isShip[i][j]) playerMap.mapPiece[i][j].setIcon(hit);
-			else playerMap.mapPiece[i][j].setIcon(dead);
+			else playerMap.mapPiece[i][j].setIcon(miss);
 		} else { // computerMap
 			int i = x / 10000;
 			int j = x % 10000;
 //			JOptionPane.showMessageDialog(this, "clicked computerMap" + i + " " + j + " " + x);
 			if (computerMap.isShip[i][j]) computerMap.mapPiece[i][j].setIcon(hit);
-			else computerMap.mapPiece[i][j].setIcon(dead);
+			else computerMap.mapPiece[i][j].setIcon(miss);
 		}
 
 	}
