@@ -130,10 +130,6 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		yRandom = random.getY();
 	}
 
-	public static void main(String args[]) {
-		new Creator(1120, 690, 3, 3, 3, "easy");
-	}
-
 	// hàm itit(): khởi tạo mảng M và xS,yS để random.
 	public void init() {
 		for (int i = 1; i <= 10; i++) {
@@ -528,7 +524,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public void goToPlay() {
 		this.setVisible(false);
 		frame.remove(this);
-		Container cn = new Play(1120, 680, playerMap, computerMap, isHard);
+		Container cn = new PlayGame(1120, 680, playerMap, computerMap, isHard);
 		frame.add(cn);
 	}
 

@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Play extends Container implements ActionListener {
+public class PlayGame extends Container implements ActionListener {
 	public SmallMap playerMap; // bản đồ của người chơi -> máy bắn trên này
 	public SmallMap computerMap; // bản đồ của computer -> người chơi bắn trên này
 	public JPanel panel1; // panel1 chứa 2 bản đồ
@@ -39,7 +39,7 @@ public class Play extends Container implements ActionListener {
 	private static boolean isHard; // chế độ khó
 	private static Queue<String> Q = new LinkedList<>();
 
-	public Play(int w, int h, SmallMap player, SmallMap computer, boolean gamemode) {
+	public PlayGame(int w, int h, SmallMap player, SmallMap computer, boolean gamemode) {
 		super();
 		
 		if (gamemode) isHard = true;
@@ -73,7 +73,6 @@ public class Play extends Container implements ActionListener {
 		dead = new ImageIcon(loadImage("src\\img\\Dead.png", w / 20, 56));
 
 		init();
-//		play();
 	}
 
 	private void init() {
@@ -92,7 +91,7 @@ public class Play extends Container implements ActionListener {
 		playerHit = 0;
 		computerHit = 0;
 		isPlayer = true;
-//		System.out.println(sumPoint);
+
 	}
 
 	private boolean shot(int i, int j) {

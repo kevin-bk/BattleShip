@@ -163,10 +163,6 @@ public class MainMenu implements ActionListener, MouseListener {
 		frame.remove(menu);
 		frame.add(select);
 	}
-	
-	public static void main(String args[]) {
-		new MainMenu(1120, 690);
-	}
 
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
