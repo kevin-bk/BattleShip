@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 public class Creator extends JLabel implements MouseListener, MouseMotionListener, ActionListener {
 	public Ship[] shipArray; // ảnh ship
@@ -55,11 +56,15 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public static int xRandom; // get tọa độ của nút Random
 	public static int yRandom;
 	public JFrame frame;
-
-	public Creator(int w, int h, int numShip3, int numShip2, int numShip1) {
+	public static boolean isHard; // chế độ khó hay dễ
+	
+	public Creator(int w, int h, int numShip3, int numShip2, int numShip1, String gamemode) {
 		super();
 		this.setSize(w, h);
-
+		
+		if (gamemode == "easy") isHard = false;
+		else isHard = true;
+		
 		// shipmap
 		map = new JLabel();
 		map.setIcon(new ImageIcon(loadImage("src\\img\\bigMap.png", 560, 560)));
@@ -126,7 +131,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	}
 
 	public static void main(String args[]) {
-		new Creator(1120, 690, 3, 3, 3);
+		new Creator(1120, 690, 3, 3, 3, "easy");
 	}
 
 	// hàm itit(): khởi tạo mảng M và xS,yS để random.
@@ -152,16 +157,27 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 	public void build(int x) {
 		// tạo Button
-		start = new JButton("Start");
-		back = new JButton("Back");
+		start = new JButton();
+		back = new JButton();
 		random = new JButton("Random");
-		start.setFont(new Font("Arial", Font.PLAIN, 40));
-		start.setForeground(Color.red);
+//		start.setFont(new Font("Arial", Font.PLAIN, 40));
+//		start.setForeground(Color.red);
 //		start.setBackground(Color.white);
-		back.setFont(new Font("Arial", Font.PLAIN, 40));
-		back.setForeground(Color.red);
-		random.setFont(new Font("Arial", Font.PLAIN, 40));
+//		back.setFont(new Font("Arial", Font.PLAIN, 40));
+//		back.setForeground(Color.red);
+		back.setBackground(Color.decode("#D2EDFE"));
+		back.setBorder(new LineBorder(Color.decode("#D2EDFE")));
+		start.setBackground(Color.decode("#D2EDFE"));
+		start.setBorder(new LineBorder(Color.decode("#D2EDFE")));
+		back.setIcon(new ImageIcon(loadImage("src\\img\\back.png",50,50)));
+		start.setIcon(new ImageIcon(loadImage("src\\img\\next.png",50,50)));
+		
+		random.setFont(new Font("Arial", Font.PLAIN, 30));
+		random.setBackground(Color.decode("#D2EDFE"));
+		random.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		random.setForeground(Color.red);
+		
+		// add action 
 		random.setActionCommand("random");
 		random.addActionListener(this);
 		back.setActionCommand("back");
@@ -177,14 +193,14 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			this.add(ship[i]);
 		}
 
-		int xB = 100;
-		int yB = 50;
+//		int xB = 100;
+//		int yB = 50;
 //		back.setIcon(new ImageIcon(loadImage("src\\img\\back.png",xB,yB)));
 //		start.setIcon(new ImageIcon(loadImage("src\\img\\start.png",xB,yB)));
 //		random.setIcon(new ImageIcon(loadImage("src\\img\\random.png",xB,yB)));
-		start.setSize(xB, yB);
-		back.setSize(xB, yB);
-		random.setSize(xB, yB);
+		start.setSize(50, 50);
+		back.setSize(50, 50);
+		random.setSize(100, 50);
 //		JLabel lb1 = new JLabel("                       ");
 //		lb1.setSize(400, 200);
 
@@ -194,7 +210,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		this.add(map);
 
 		this.setLayout(new FlowLayout());
-		this.setIcon(new ImageIcon(loadImage("src\\img\\nen2.png", 1120, 690)));
+		this.setIcon(new ImageIcon(loadImage("src\\img\\blue.png", 1120, 690)));
 
 	}
 
@@ -512,7 +528,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public void goToPlay() {
 		this.setVisible(false);
 		frame.remove(this);
-		Container cn = new Play(1120, 680, playerMap, computerMap);
+		Container cn = new Play(1120, 680, playerMap, computerMap, isHard);
 		frame.add(cn);
 	}
 

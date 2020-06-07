@@ -39,9 +39,12 @@ public class Play extends Container implements ActionListener {
 	private static boolean isHard; // chế độ khó
 	private static Queue<String> Q = new LinkedList<>();
 
-	public Play(int w, int h, SmallMap player, SmallMap computer) {
+	public Play(int w, int h, SmallMap player, SmallMap computer, boolean gamemode) {
 		super();
-
+		
+		if (gamemode) isHard = true;
+		else isHard = false;
+		
 		// add map và thông tin
 		panel1 = new JPanel();
 		playerMap = player;
@@ -89,7 +92,7 @@ public class Play extends Container implements ActionListener {
 		playerHit = 0;
 		computerHit = 0;
 		isPlayer = true;
-		System.out.println(sumPoint);
+//		System.out.println(sumPoint);
 	}
 
 	private boolean shot(int i, int j) {
@@ -97,7 +100,7 @@ public class Play extends Container implements ActionListener {
 		if (playerMap.isShip[i][j]) {
 			playerMap.mapPiece[i][j].setIcon(hit);
 			computerHit++;
-			System.out.println("Computer: " + computerHit);
+//			System.out.println("Computer: " + computerHit);
 			return true;
 		} else
 			playerMap.mapPiece[i][j].setIcon(miss);
@@ -221,7 +224,8 @@ public class Play extends Container implements ActionListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		hitRandomHard();
+		if (isHard) hitRandomHard();
+		else hitRandom();
 		if (isComputerWin()) {
 			JOptionPane.showMessageDialog(this, "You Lose!!!");
 		}
