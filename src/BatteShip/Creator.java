@@ -184,8 +184,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		start.setSize(xB, yB);
 		back.setSize(xB, yB);
 		random.setSize(xB, yB);
-		JLabel lb1 = new JLabel("                       ");
-		lb1.setSize(400, 200);
+//		JLabel lb1 = new JLabel("                       ");
+//		lb1.setSize(400, 200);
 
 //		test.add(lb1);
 
@@ -221,28 +221,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 				return false;
 			}
 
-			int t1 = 0, t2 = 0, t3 = 0, cnt = 1;
-			int[] a = new int[4];
-			a[1] = 0;
-			a[2] = 0;
-			a[3] = 0;
-			if (xStart >= xLeft && xStart <= xRight && yStart >= yUp && yStart <= yDown) {
-				int u = (xStart - xLeft) / 56 + 1;
-				int v = (yStart - yUp) / 56 + 1;
-				if (v == j) {
-					for (int t = 0; t < leng; t++) {
-						for (int w = 0; w < leng; w++) {
-							if (u + t == i + w)
-								a[++cnt] = u + t;
-						}
-					}
-					t1 = a[1];
-					t2 = a[2];
-					t3 = a[3];
-				}
-			}
 			for (int t = 0; t < leng; t++)
-				if (M[i + t][j] && (i + t != t1) && (i + t != t2) && (i + t) != t3) {
+				if (M[i + t][j]) {
 					ship[tmp].setLocation(xStart, yStart);
 					return false;
 				}
@@ -254,62 +234,73 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			for (int t = 0; t < leng; t++)
 				M[i + t][j] = true;
 
-			if (xStart < xLeft || xStart > xRight || yStart < yUp || yStart > yDown)
-				return true;
-			int p = (xStart - xLeft) / 56 + 1;
-			int q = (yStart - yUp) / 56 + 1;
-			for (int t = 0; t < leng; t++)
-				M[p + t][q] = false;
+//			if (xStart < xLeft || xStart > xRight || yStart < yUp || yStart > yDown)
+//				return true;
+//			int p = (xStart - xLeft) / 56 + 1;
+//			int q = (yStart - yUp) / 56 + 1;
+//			for (int t = 0; t < leng; t++)
+//				M[p + t][q] = false;
 
 //				System.out.println("p = " + p + " q = " + q);
 			return true;
 		}
 
-		// tàu nằm dọc
-		if ((y + leng * 50 > yDown && leng > 1) || (leng == 1 && y > yDown)) {
-			ship[tmp].setLocation(xStart, yStart);
-			return false;
-		}
-		int t1 = 0, t2 = 0, t3 = 0, cnt = 1;
-		int[] a = new int[4];
-		a[1] = 0;
-		a[2] = 0;
-		a[3] = 0;
-		if (xStart >= xLeft && xStart <= xRight && yStart >= yUp && yStart <= yDown) {
-			int u = (xStart - xLeft) / 56 + 1;
-			int v = (yStart - yUp) / 56 + 1;
-			if (u == i) {
-				for (int t = 0; t < leng; t++) {
-					for (int w = 0; w < leng; w++) {
-						if (v + t == j + w)
-							a[++cnt] = v + t;
-					}
-				}
-				t1 = a[1];
-				t2 = a[2];
-				t3 = a[3];
-			}
-
-		}
-
-		for (int t = 0; t < leng; t++)
-			if (M[i][j + t] && (j + t != t1) && (j + t != t2) && (j + t) != t3) {
-				ship[tmp].setLocation(xStart, yStart);
-				return false;
-			}
-
-		ship[tmp].setLocation(x, y);
-		for (int t = 0; t < leng; t++)
-			M[i][j + t] = true;
-		if (xStart < xLeft || xStart > xRight || yStart < yUp || yStart > yDown)
-			return true;
-		int p = (xStart - xLeft) / 56;
-		int q = (yStart - yUp) / 56;
-		for (int t = 0; t < leng; t++)
-			M[p][q + t] = false;
+//		// tàu nằm dọc
+//		if ((y + leng * 50 > yDown && leng > 1) || (leng == 1 && y > yDown)) {
+//			ship[tmp].setLocation(xStart, yStart);
+//			return false;
+//		}
+//		int t1 = 0, t2 = 0, t3 = 0, cnt = 1;
+//		int[] a = new int[4];
+//		a[1] = 0;
+//		a[2] = 0;
+//		a[3] = 0;
+//		if (xStart >= xLeft && xStart <= xRight && yStart >= yUp && yStart <= yDown) {
+//			int u = (xStart - xLeft) / 56 + 1;
+//			int v = (yStart - yUp) / 56 + 1;
+//			if (u == i) {
+//				for (int t = 0; t < leng; t++) {
+//					for (int w = 0; w < leng; w++) {
+//						if (v + t == j + w)
+//							a[++cnt] = v + t;
+//					}
+//				}
+//				t1 = a[1];
+//				t2 = a[2];
+//				t3 = a[3];
+//			}
+//
+//		}
+//
+//		for (int t = 0; t < leng; t++)
+//			if (M[i][j + t] && (j + t != t1) && (j + t != t2) && (j + t) != t3) {
+//				ship[tmp].setLocation(xStart, yStart);
+//				return false;
+//			}
+//
+//		ship[tmp].setLocation(x, y);
+//		for (int t = 0; t < leng; t++)
+//			M[i][j + t] = true;
+//		if (xStart < xLeft || xStart > xRight || yStart < yUp || yStart > yDown)
+//			return true;
+//		int p = (xStart - xLeft) / 56;
+//		int q = (yStart - yUp) / 56;
+//		for (int t = 0; t < leng; t++)
+//			M[p][q + t] = false;
 		return true;
 	}
 
+	public boolean putForRandom(int tmp, int x, int y, int i, int j, int leng) {
+		if (x + 50 * leng > xRight && leng > 1) return false;
+		for (int t = 0; t < leng; t++) {
+			if (M[i + t][j]) return false;
+		}
+		
+		for (int t = 0; t < leng; t++) M[i + t][j] = true;
+		ship[tmp].setLocation(x, y);
+		return true;
+	}
+	
 	public void setRandom() {
 //		System.out.println("Random!");
 		for (int i = 1; i <= 10; i++) {
@@ -330,67 +321,88 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			int j = rd.nextInt(10);
 			int x = xLeft + 56 * i + 10;
 			int y = yUp + 56 * j + 5;
-			boolean c = put(cnt, x, y, i, j);
+			xStart = xS[cnt];
+			yStart = yS[cnt];
+			boolean c = putForRandom(cnt, x, y, i + 1, j + 1, lengShip[cnt]);
 			if (c) {
+				System.out.println("Put ship " + cnt + " at " + (i + 1) + ", " + (j + 1));
 				cnt++;
 				Q.remove();
 			}
 		}
 
+		for (int i = 1; i <= 10; i++) {
+			for (int j = 1; j <= 10; j++) {
+				if (M[i][j])
+					System.out.print("1 ");
+				else
+					System.out.print("0 ");
+			}
+			System.out.println();
+		}
+		System.out.println("================");
 	}
 
-	public void rotate(int tmp, int x, int y, int i, int j) {
-		System.out.println("i = " + i + " j = " + j);
-		int leng = lengShip[tmp];
-		// ngang -> dọc
-		if (isNgang[tmp]) {
-			if (y + leng * 50 > yDown && leng > 1)
-				return;
-			for (int t = 1; t < leng; t++) {
-				if (M[i][j + t])
-					return;
-			}
-
-			JLabel lb = new JLabel();
-			lb.setIcon(new ImageIcon(shipArray[tmp].getShipRorate()));
-			lb.setSize(50, leng * 50);
-			for (int t = 1; t < leng; t++) {
-				M[i][j + t] = true;
-				M[i + t][j] = false;
-			}
-			ship[tmp].setVisible(false);
-			frame.remove(ship[tmp]);
-			frame.add(lb);
-			lb.setLocation(x, y);
-//			ship[tmp].setSize(50, leng * 50);
-//			ship[tmp].setIcon(new ImageIcon(shipArray[tmp].getShipRorate()));
-//			ship[tmp].setLocation(x, y);
-			isNgang[tmp] = false;
-			return;
-		}
-
-		// dọc -> ngang
-
-		if (x + leng * 50 > xRight && leng > 1)
-			return;
-		for (int t = 1; t < leng; t++)
-			if (M[i + t][j])
-				return;
-
-		ship[tmp].setSize(leng * 50, 50);
-		ship[tmp].setIcon(new ImageIcon(shipArray[tmp].getShipRorate()));
-		ship[tmp].setLocation(x, y);
-		isNgang[tmp] = true;
-		for (int t = 1; t < leng; t++) {
-			M[i][j + t] = false;
-			M[i + t][j] = true;
-		}
-		return;
-	}
+//	public void rotate(int tmp, int x, int y, int i, int j) {
+//		System.out.println("i = " + i + " j = " + j);
+//		int leng = lengShip[tmp];
+//		// ngang -> dọc
+//		if (isNgang[tmp]) {
+//			if (y + leng * 50 > yDown && leng > 1)
+//				return;
+//			for (int t = 1; t < leng; t++) {
+//				if (M[i][j + t])
+//					return;
+//			}
+//
+//			for (int t = 1; t < leng; t++) {
+//				M[i][j + t] = true;
+//				M[i + t][j] = false;
+//			}
+////			ship[tmp].setSize(50, leng * 50);
+////			ship[tmp].setIcon(new ImageIcon(shipArray[tmp].getShipRorate()));
+////			ship[tmp].setLocation(x, y);
+//			isNgang[tmp] = false;
+//			return;
+//		}
+//
+//		// dọc -> ngang
+//
+//		if (x + leng * 50 > xRight && leng > 1)
+//			return;
+//		for (int t = 1; t < leng; t++)
+//			if (M[i + t][j])
+//				return;
+//
+//		ship[tmp].setSize(leng * 50, 50);
+//		ship[tmp].setIcon(new ImageIcon(shipArray[tmp].getShipRorate()));
+//		ship[tmp].setLocation(x, y);
+//		isNgang[tmp] = true;
+//		for (int t = 1; t < leng; t++) {
+//			M[i][j + t] = false;
+//			M[i + t][j] = true;
+//		}
+//		return;
+//	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
+//		System.out.println("Drag");
+		if (xStart >= xLeft && xStart <= xRight && yStart >= yUp && yStart <= yDown) {
+			int i = (xStart - xLeft) / 56 + 1;
+			int j = (yStart - yUp) / 56 + 1;
+			int tmp = 0;
+			for (int k = 1; k <= numShip; k++) {
+				if (e.getSource() == ship[k]) {
+					tmp = k;
+					break;
+				}
+			}
+			int leng = lengShip[tmp];
+			for (int t = 0; t < leng; t++) M[i + t][j] = false;
+		}
+
 		int xNew = e.getX() + e.getComponent().getX() - X;
 		int yNew = e.getY() + e.getComponent().getY() - Y;
 		e.getComponent().setLocation(xNew, yNew);
@@ -466,7 +478,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 		if ("start".equals(e.getActionCommand())) {
 			boolean c = isReady();
-			if (!c) return;
+			if (!c)
+				return;
 			playerMap = getFinalMap();
 			setRandom();
 			computerMap = getFinalMap();
@@ -479,26 +492,27 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		for (int i = 1; i <= numShip; i++) {
 			int x = ship[i].getX();
 			int y = ship[i].getY();
-			if (x < xLeft || x > xRight || y < yUp || y > yDown) return false;
+			if (x < xLeft || x > xRight || y < yUp || y > yDown)
+				return false;
 		}
 		return true;
 	}
-	
+
 	private SmallMap getFinalMap() {
 		SmallMap s = new SmallMap(560, 560);
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
-				s.isShip[i][j] = M[i][j];
+				s.isShip[j][i] = M[i][j];
 			}
 		}
 		return s;
 	}
-	
+
 	public void goToPlay() {
 		this.setVisible(false);
 		frame.remove(this);
-		Container cn = new Play(1120,680,playerMap,computerMap);
+		Container cn = new Play(1120, 680, playerMap, computerMap);
 		frame.add(cn);
 	}
-	
+
 }

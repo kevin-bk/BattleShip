@@ -92,10 +92,11 @@ public class Play extends Container implements ActionListener {
 			computerHit++;
 		}
 		else playerMap.mapPiece[i][j].setIcon(miss);
+		markC[i][j] = true;
 	}
 	
 	private void hitRandom()  {
-		if (isPlayer) return;
+//		if (isPlayer) return;
 		Random rd = new Random();
 		int i = rd.nextInt(10) + 1;
 		int j = rd.nextInt(10) + 1;
@@ -129,13 +130,15 @@ public class Play extends Container implements ActionListener {
 		}
 		else computerMap.mapPiece[i][j].setIcon(miss);
 		isPlayer = false;
+		markP[i][j] = true;		
+		hitRandom();
 		try {
-			Thread.sleep(10);
+			Thread.sleep(500);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		hitRandom();
+
 	}
 
 	
