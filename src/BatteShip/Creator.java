@@ -126,7 +126,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	}
 
 	public static void main(String args[]) {
-		new Creator(1120, 690, 2, 3, 3);
+		new Creator(1120, 690, 3, 3, 3);
 	}
 
 	// hàm itit(): khởi tạo mảng M và xS,yS để random.
@@ -170,7 +170,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		start.addActionListener(this);
 
 		this.add(back);
-
+		this.add(random);
+		this.add(start);
 		for (int i = 1; i <= x; i++) {
 //			shipMap.add(ship[i]);
 			this.add(ship[i]);
@@ -189,9 +190,9 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 //		test.add(lb1);
 
-		this.add(random);
+
 		this.add(map);
-		this.add(start);
+
 		this.setLayout(new FlowLayout());
 		this.setIcon(new ImageIcon(loadImage("src\\img\\nen2.png", 1120, 690)));
 
@@ -325,22 +326,22 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			yStart = yS[cnt];
 			boolean c = putForRandom(cnt, x, y, i + 1, j + 1, lengShip[cnt]);
 			if (c) {
-				System.out.println("Put ship " + cnt + " at " + (i + 1) + ", " + (j + 1));
+//				System.out.println("Put ship " + cnt + " at " + (i + 1) + ", " + (j + 1));
 				cnt++;
 				Q.remove();
 			}
 		}
 
-		for (int i = 1; i <= 10; i++) {
-			for (int j = 1; j <= 10; j++) {
-				if (M[i][j])
-					System.out.print("1 ");
-				else
-					System.out.print("0 ");
-			}
-			System.out.println();
-		}
-		System.out.println("================");
+//		for (int i = 1; i <= 10; i++) {
+//			for (int j = 1; j <= 10; j++) {
+//				if (M[i][j])
+//					System.out.print("1 ");
+//				else
+//					System.out.print("0 ");
+//			}
+//			System.out.println();
+//		}
+//		System.out.println("================");
 	}
 
 //	public void rotate(int tmp, int x, int y, int i, int j) {
