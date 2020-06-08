@@ -17,6 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -38,12 +40,17 @@ public class PlayGame extends Container implements ActionListener {
 	private static boolean[][] markP, markC; // markP : đánh dấu điểm đã bắn trên computerMap, ngược lại với markC
 	private static boolean isHard; // chế độ khó
 	private static Queue<String> Q = new LinkedList<>();
+	
+	private static ArrayList<String> A;	// ứng với bản đồ của máy chơi
+	private static ArrayList<String> B; // ứng với bản đồ của người chơi
 
-	public PlayGame(int w, int h, SmallMap player, SmallMap computer, boolean gamemode) {
+	public PlayGame(int w, int h, SmallMap player, SmallMap computer, boolean gamemode, ArrayList <String> pl, ArrayList <String> cm) {
 		super();
 		
 		if (gamemode) isHard = true;
 		else isHard = false;
+		A = pl;
+		B = cm;
 		
 		// add map và thông tin
 		panel1 = new JPanel();
@@ -69,7 +76,7 @@ public class PlayGame extends Container implements ActionListener {
 
 		// tạo image icon
 		hit = new ImageIcon(loadImage("src\\img\\hit.png", w / 20, 56));
-		miss = new ImageIcon(loadImage("src\\img\\miss.png", w / 20, 56));
+		miss = new ImageIcon(loadImage("src\\img\\miss2.png", w / 20, 56));
 		dead = new ImageIcon(loadImage("src\\img\\Dead.png", w / 20, 56));
 
 		init();
@@ -194,6 +201,50 @@ public class PlayGame extends Container implements ActionListener {
 		return false;
 	}
 	
+	public void checkDeadOnComputerMap() {
+		for (String s : B) {
+			if (s == "") continue;
+			int x = Integer.parseInt(s);
+			int leng = x/10000;
+			int j = (x - leng*10000)/100;
+			int i = x % 100;
+			boolean c = true;
+//			System.out.println(leng + " " + i + " " + j);
+			for (int t = 0; t < leng; t++) {
+				if (!markP[i][j + t]) c = false;
+//				System.out.println("isShip[" + i + "," + (j+t) + " = " + computerMap.isShip[i][j + t]);
+			}
+			if (!c) continue;
+//			System.out.println("Dead");
+			for (int t = 0; t < leng; t++) {
+				computerMap.mapPiece[i][j + t].setIcon(new ImageIcon(loadImage("src\\img\\" + leng + (t+1) + ".png", 56,56)));
+			}
+		}
+	}
+	
+	
+	public void checkDeadOnPlayerMap() {
+		for (String s : A) {
+			if (s == "") continue;
+			int x = Integer.parseInt(s);
+			int leng = x/10000;
+			int j = (x - leng*10000)/100;
+			int i = x % 100;
+			boolean c = true;
+//			System.out.println(leng + " " + i + " " + j);
+			for (int t = 0; t < leng; t++) {
+				if (!markC[i][j + t]) c = false;
+//				System.out.println("isShip[" + i + "," + (j+t) + " = " + computerMap.isShip[i][j + t]);
+			}
+			if (!c) continue;
+//			System.out.println("Dead");
+			for (int t = 0; t < leng; t++) {
+				playerMap.mapPiece[i][j + t].setIcon(new ImageIcon(loadImage("src\\img\\" + leng + (t+1) + ".png", 56,56)));
+			}
+		}
+	}
+	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -202,16 +253,19 @@ public class PlayGame extends Container implements ActionListener {
 		int x = Integer.parseInt(e.getActionCommand());
 		int i = x / 100;
 		int j = x % 100;
-		if (markP[i][j])
+		if (markP[i][j]) {
 			return;
+		}
+		markP[i][j] = true;
 		if (computerMap.isShip[i][j]) {
 			computerMap.mapPiece[i][j].setIcon(hit);
 			playerHit++;
+			checkDeadOnComputerMap();
 //			System.out.println("Player: " + playerHit);
 		} else
 			computerMap.mapPiece[i][j].setIcon(miss);
 		isPlayer = false;
-		markP[i][j] = true;
+		
 		
 		if (isPlayerWin()) {
 			JOptionPane.showMessageDialog(this, "You Win!!!");
@@ -225,6 +279,8 @@ public class PlayGame extends Container implements ActionListener {
 		}
 		if (isHard) hitRandomHard();
 		else hitRandom();
+		
+		checkDeadOnPlayerMap();
 		if (isComputerWin()) {
 			JOptionPane.showMessageDialog(this, "You Lose!!!");
 		}

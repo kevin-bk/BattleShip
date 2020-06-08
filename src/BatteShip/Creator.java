@@ -15,6 +15,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -58,6 +59,9 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public JFrame frame;
 	public static boolean isHard; // chế độ khó hay dễ
 	
+	public static ArrayList <String> A ; //aray lưu tọa độ tàu của người chơi
+	public static ArrayList <String> B; // lưu tọa độ tàu của computer
+	
 	public Creator(int w, int h, int numShip3, int numShip2, int numShip1, String gamemode) {
 		super();
 		this.setSize(w, h);
@@ -78,6 +82,12 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		nShip3 = numShip3;
 
 		numShip = x;
+		
+		A = new ArrayList <String>();
+		B = new ArrayList <String>();
+		A.add("");
+		B.add("");
+		
 		shipArray = new Ship[x + 1];
 		xS = new int[x + 1];
 		yS = new int[x + 1];
@@ -89,12 +99,16 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			shipArray[cnt] = new Ship(3, 150, 50);
 			ship[cnt] = new JLabel();
 			ship[cnt].setIcon(new ImageIcon(shipArray[cnt].getShip()));
+			A.add("30000");
+			B.add("30000");
 			cnt++;
 		}
 		for (int i = 1; i <= numShip2; i++) {
 			shipArray[cnt] = new Ship(2, 100, 50);
 			ship[cnt] = new JLabel();
 			ship[cnt].setIcon(new ImageIcon(shipArray[cnt].getShip()));
+			A.add("20000");
+			B.add("20000");
 			cnt++;
 		}
 
@@ -102,6 +116,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			shipArray[cnt] = new Ship(1, 50, 50);
 			ship[cnt] = new JLabel();
 			ship[cnt].setIcon(new ImageIcon(shipArray[cnt].getShip()));
+			A.add("10000");
+			B.add("10000");
 			cnt++;
 		}
 
@@ -246,7 +262,9 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 				ship[tmp].setLocation(x - 10, y);
 			for (int t = 0; t < leng; t++)
 				M[i + t][j] = true;
-
+			
+			int v = (Integer.parseInt(A.get(tmp)))/10000;
+			A.set(tmp, "" + (v * 10000 + i * 100 + j));
 //			if (xStart < xLeft || xStart > xRight || yStart < yUp || yStart > yDown)
 //				return true;
 //			int p = (xStart - xLeft) / 56 + 1;
@@ -303,7 +321,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		return true;
 	}
 
-	public boolean putForRandom(int tmp, int x, int y, int i, int j, int leng) {
+	public boolean putForRandom(int tmp, int x, int y, int i, int j, int leng, boolean isForPlayer) {
 		if (x + 50 * leng > xRight && leng > 1) return false;
 		for (int t = 0; t < leng; t++) {
 			if (M[i + t][j]) return false;
@@ -311,10 +329,21 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		
 		for (int t = 0; t < leng; t++) M[i + t][j] = true;
 		ship[tmp].setLocation(x, y);
+		
+		if (isForPlayer) {
+			int v = (Integer.parseInt(A.get(tmp)))/10000;
+//			System.out.println("v = " + v);
+			A.set(tmp, "" + (v * 10000 + i * 100 + j));
+		}
+		else {
+			int v = (Integer.parseInt(B.get(tmp)))/10000;
+			B.set(tmp, "" + (v * 10000 + i * 100 + j));
+		}
+		
 		return true;
 	}
 	
-	public void setRandom() {
+	public void setRandom(boolean isForPlayer) {
 //		System.out.println("Random!");
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
@@ -336,7 +365,11 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			int y = yUp + 56 * j + 5;
 			xStart = xS[cnt];
 			yStart = yS[cnt];
-			boolean c = putForRandom(cnt, x, y, i + 1, j + 1, lengShip[cnt]);
+			
+			boolean is = true;
+			if (!isForPlayer) is = false;
+			
+			boolean c = putForRandom(cnt, x, y, i + 1, j + 1, lengShip[cnt], is);
 			if (c) {
 //				System.out.println("Put ship " + cnt + " at " + (i + 1) + ", " + (j + 1));
 				cnt++;
@@ -486,7 +519,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if ("random".equals(e.getActionCommand())) {
-			setRandom();
+			setRandom(true);
 		}
 
 		if ("start".equals(e.getActionCommand())) {
@@ -494,7 +527,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			if (!c)
 				return;
 			playerMap = getFinalMap();
-			setRandom();
+			setRandom(false);
 			computerMap = getFinalMap();
 			goToPlay();
 		}
@@ -524,7 +557,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public void goToPlay() {
 		this.setVisible(false);
 		frame.remove(this);
-		Container cn = new PlayGame(1120, 680, playerMap, computerMap, isHard);
+		Container cn = new PlayGame(1120, 680, playerMap, computerMap, isHard, A, B);
 		frame.add(cn);
 	}
 
