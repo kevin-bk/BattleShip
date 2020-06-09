@@ -81,7 +81,8 @@ public class MainMenu implements ActionListener, MouseListener {
 		frame.setResizable(false);
 		frame.setVisible(true);
 		playSound("/sound/sound.wav");
-		if (!isPlaySound) clip.stop();
+		if (!isPlaySound)
+			clip.stop();
 	}
 
 	// menu chứa các lựa chọn: exit, start, sound, highScore,...
@@ -104,8 +105,13 @@ public class MainMenu implements ActionListener, MouseListener {
 		// nút sound
 		sound = new JButton();
 		sound.setBounds(181, 511, 78, 65);
-		sound.setIcon(new ImageIcon(loadImage("src\\img\\musicOn.png", 78, 65)));
-		sound.setActionCommand("sound on");
+		if (isPlaySound) {
+			sound.setIcon(new ImageIcon(loadImage("src\\img\\musicOn.png", 78, 65)));
+			sound.setActionCommand("sound on");
+		} else {
+			sound.setIcon(new ImageIcon(loadImage("src\\img\\musicOff.png", 78, 65)));
+			sound.setActionCommand("sound off");
+		}
 		sound.addActionListener(this);
 		// nút game mode
 		gamemode = new JButton();
@@ -216,13 +222,13 @@ public class MainMenu implements ActionListener, MouseListener {
 		} catch (Exception e) {
 			System.out.println("File not found");
 		}
-		
+
 		score[0].setText("Điểm cao: ");
 		for (int i = 1; i < 6; i++) {
-			score[i].setText("" + i +". " + A[i]);
+			score[i].setText("" + i + ". " + A[i]);
 		}
 	}
-	
+
 	private void resetHighScore() {
 		String s = "0 0 0 0 0";
 		try {
@@ -233,7 +239,7 @@ public class MainMenu implements ActionListener, MouseListener {
 			System.out.println(e);
 		}
 	}
-	
+
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
 		try {
@@ -350,7 +356,7 @@ public class MainMenu implements ActionListener, MouseListener {
 			int n2 = Integer.parseInt(numShip[2].getText());
 			int n3 = Integer.parseInt(numShip[3].getText());
 			clip.stop();
-			creator = new Creator(1120, 690, n3, n2, n1, gamemode.getActionCommand(),isPlaySound);
+			creator = new Creator(1120, 690, n3, n2, n1, gamemode.getActionCommand(), isPlaySound);
 			creator.back.setActionCommand("back");
 			creator.back.addActionListener(this);
 			frame.setVisible(false);
@@ -362,12 +368,12 @@ public class MainMenu implements ActionListener, MouseListener {
 			frame.setVisible(true);
 			clip.start();
 		}
-		
+
 		if ("reset".equals(e.getActionCommand())) {
 			resetHighScore();
 			showHighScore();
 		}
-		
+
 	}
 
 	@Override
