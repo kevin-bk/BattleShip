@@ -131,7 +131,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		build(x);
 		init();
 
-		frame = new JFrame();
+		frame = new JFrame("Battle Ship");
+		frame.setIconImage(loadImage("src\\img\\logo.png",90,90));
 		frame.add(this);
 		frame.setSize(w, h);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -475,8 +476,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public void goToPlay() {
 		this.setVisible(false);
 		frame.remove(this);
-		Container cn = new PlayGame(1120, 680, playerMap, computerMap, isHard, A, B);
-		frame.add(cn);
+		new PlayGame(1120, 680, playerMap, computerMap, isHard, A, B);
+		frame.setVisible(false);
 	}
 
 }

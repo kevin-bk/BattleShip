@@ -1,57 +1,82 @@
 package BatteShip;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class PlayGame extends Container implements ActionListener {
-	public SmallMap playerMap; // bản đồ của người chơi -> máy bắn trên này
-	public SmallMap computerMap; // bản đồ của computer -> người chơi bắn trên này
-	public JPanel panel1; // panel1 chứa 2 bản đồ
-	public JPanel panel2; // panel2 chứa thông tin chơi (turn,...)
-	public Container cn; // cn chứa panel1 và panel2
-	public JLabel turn; // hiển thị turn của player hoặc computer
+	private JFrame frame;
+	private SmallMap playerMap; // bản đồ của người chơi -> máy bắn trên này
+	private SmallMap computerMap; // bản đồ của computer -> người chơi bắn trên này
+	private JPanel panel1; // panel1 chứa 2 bản đồ
+	private JPanel panel2; // panel2 chứa thông tin chơi (turn,...)
+	private Container cn; // cn chứa panel1 và panel2
+	private JLabel turnPlayer; // hiển thị turn của player
+	private JLabel turnComputer;
+	private JLabel turnP, turnC, curP, curC, hitP, hitC, pointP, pointC, ratioP, ratioC, shipDeadP, shipDeadC;
+	private JButton back; // quay về menu khi win/lose
 
 	private ImageIcon miss; // bắn trượt
 	private ImageIcon hit; // bắn trúng
 	private ImageIcon dead; // tàu bị phá hoàn toàn
 
-	private static int playerHit, computerHit; // số điểm bắn trúng hiện tại
+	private static int playerHit = 0, computerHit = 0; // số điểm bắn trúng hiện tại
 	private static int sumPoint; // tổng số điểm ship trên mỗi map
 	private static boolean isPlayer; // turn của player hay của computer
 	private static boolean[][] markP, markC; // markP : đánh dấu điểm đã bắn trên computerMap, ngược lại với markC
 	private static boolean isHard; // chế độ khó
 	private static Queue<String> Q = new LinkedList<>();
-	
-	private static ArrayList<String> A;	// ứng với bản đồ của máy chơi
+
+	private static ArrayList<String> A; // ứng với bản đồ của máy chơi
 	private static ArrayList<String> B; // ứng với bản đồ của người chơi
 
-	public PlayGame(int w, int h, SmallMap player, SmallMap computer, boolean gamemode, ArrayList <String> pl, ArrayList <String> cm) {
+	private static int currentPlayer = 0; // số điểm đã bắn của player
+	private static int currentComputer = 0;
+	private static int playerPoint = 0, computerPoint = 0, shipDeadByPlayer = 0, shipDeadByComputer = 0;
+
+	public PlayGame(int w, int h, SmallMap player, SmallMap computer, boolean gamemode, ArrayList<String> pl,
+			ArrayList<String> cm) {
 		super();
-		
-		if (gamemode) isHard = true;
-		else isHard = false;
+
+		if (gamemode)
+			isHard = true;
+		else
+			isHard = false;
 		A = pl;
 		B = cm;
-		
+
 		// add map và thông tin
 		panel1 = new JPanel();
 		playerMap = player;
@@ -63,13 +88,52 @@ public class PlayGame extends Container implements ActionListener {
 
 		panel1.setBounds(0, 120, w - 15, h - 160);
 
+		// tao khung
+//		SwingConstants.CENTER
 		panel2 = new JPanel();
-		turn = new JLabel("Player Turn");
-//		panel2.add(turn);
-		
+		panel2.setLayout(new GridLayout(1, 2));
+		turnPlayer = new JLabel();
+		turnComputer = new JLabel();
+		turnP = new JLabel("", SwingConstants.CENTER);
+		turnC = new JLabel("", SwingConstants.CENTER);
+		curP = new JLabel("", SwingConstants.CENTER);
+		curC = new JLabel("", SwingConstants.CENTER);
+		hitP = new JLabel("", SwingConstants.CENTER);
+		hitC = new JLabel("", SwingConstants.CENTER);
+		pointP = new JLabel("", SwingConstants.CENTER);
+		pointC = new JLabel("", SwingConstants.CENTER);
+		ratioP = new JLabel("", SwingConstants.CENTER);
+		ratioC = new JLabel("", SwingConstants.CENTER);
+		shipDeadP = new JLabel("", SwingConstants.CENTER);
+		shipDeadC = new JLabel("", SwingConstants.CENTER);
+		turnPlayer.setLayout(new GridLayout(3, 2));
+		turnComputer.setLayout(new GridLayout(3, 2));
+
+		turnPlayer.add(turnP);
+		turnPlayer.add(curP);
+		turnPlayer.add(hitP);
+		turnPlayer.add(ratioP);
+		turnPlayer.add(shipDeadP);
+		turnPlayer.add(pointP);
+
+		turnComputer.add(turnC);
+		turnComputer.add(curC);
+		turnComputer.add(hitC);
+		turnComputer.add(ratioC);
+		turnComputer.add(shipDeadC);
+		turnComputer.add(pointC);
+		panel2.add(turnPlayer);
+		panel2.add(turnComputer);
+
+		turnPlayer.setBackground(Color.decode("#D2EDFE"));
+		turnPlayer.setOpaque(true);
+		turnComputer.setBackground(Color.decode("#D2EDFE"));
+		turnComputer.setOpaque(true);
+		update();
 		panel2.setSize(w, 120);
 		addAction(); // tạo listener trên button
-
+		panel1.setBackground(Color.decode("#D2EDFE"));
+		panel1.setOpaque(true);
 		this.add(panel2);
 		this.add(panel1, "North");
 		this.setSize(w, h);
@@ -78,8 +142,16 @@ public class PlayGame extends Container implements ActionListener {
 		hit = new ImageIcon(loadImage("src\\img\\hit.png", w / 20, 56));
 		miss = new ImageIcon(loadImage("src\\img\\miss2.png", w / 20, 56));
 		dead = new ImageIcon(loadImage("src\\img\\Dead.png", w / 20, 56));
-
+		back = new JButton();
 		init();
+		frame = new JFrame("Battle Ship");
+		frame.setIconImage(loadImage("src\\img\\logo.png", 90, 90));
+		frame.add(this);
+		frame.setSize(w, h);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
+		frame.setVisible(true);
 	}
 
 	private void init() {
@@ -89,7 +161,7 @@ public class PlayGame extends Container implements ActionListener {
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
 				if (playerMap.isShip[i][j])
-				cnt++;
+					cnt++;
 				markP[i][j] = false;
 				markC[i][j] = false;
 			}
@@ -101,21 +173,67 @@ public class PlayGame extends Container implements ActionListener {
 
 	}
 
+	private void update() {
+		if (currentComputer != 0 && currentPlayer != 0) {
+			playerPoint = playerHit * 100 + shipDeadByPlayer * 1000 + ((playerHit * 100) / currentPlayer) * 100;
+			computerPoint = computerHit * 100 + shipDeadByComputer * 1000
+					+ ((computerHit * 100) / currentComputer) * 100;
+		}
+
+		turnP.setText("Player");
+		curP.setText("Số điểm đã bắn: " + currentPlayer);
+		hitP.setText("Số điểm bắn trúng: " + playerHit);
+		if (currentPlayer != 0) {
+			ratioP.setText("Tỷ lệ bắn trúng: " + ((playerHit * 100) / currentPlayer) + " %");
+		} else {
+			ratioP.setText("Tỷ lệ bắn trúng: 0 %");
+		}
+		pointP.setText("Điểm: " + playerPoint);
+		shipDeadP.setText("Số tàu bị hạ: " + shipDeadByPlayer);
+
+		turnC.setText("Computer");
+		curC.setText("Số điểm đã bắn: " + currentComputer);
+		hitC.setText("Số điểm bắn trúng: " + computerHit);
+		if (currentComputer != 0) {
+			ratioC.setText("Tỷ lệ bắn trúng: " + ((computerHit * 100) / currentComputer) + " %");
+		} else {
+			ratioC.setText("Tỷ lệ bắn trúng: 0 %");
+		}
+		pointC.setText("Điểm: " + computerPoint);
+		shipDeadC.setText("Số tàu bị hạ: " + shipDeadByComputer);
+
+		turnP.setForeground(Color.decode("#EB5A37"));
+		turnP.setFont(new Font("Arial", Font.PLAIN, 20));
+		curP.setForeground(Color.decode("#EB5A37"));
+		curP.setFont(new Font("Arial", Font.PLAIN, 15));
+		hitP.setForeground(Color.decode("#EB5A37"));
+		hitP.setFont(new Font("Arial", Font.PLAIN, 15));
+		ratioP.setForeground(Color.decode("#EB5A37"));
+		ratioP.setFont(new Font("Arial", Font.PLAIN, 15));
+		shipDeadP.setForeground(Color.decode("#EB5A37"));
+		shipDeadP.setFont(new Font("Arial", Font.PLAIN, 15));
+		pointP.setForeground(Color.decode("#EB5A37"));
+		pointP.setFont(new Font("Arial", Font.PLAIN, 15));
+
+	}
+
 	private boolean shot(int i, int j) {
+		currentComputer++;
 		markC[i][j] = true;
 		if (playerMap.isShip[i][j]) {
 			playerMap.mapPiece[i][j].setIcon(hit);
 			computerHit++;
-//			System.out.println("Computer: " + computerHit);
 			return true;
 		} else
-			playerMap.mapPiece[i][j].setIcon(miss);
+//			playerMap.mapPiece[i][j].setIcon(miss);
+			playerMap.mapPiece[i][j].setFont(new Font("Arial", Font.PLAIN, 30));
+		playerMap.mapPiece[i][j].setForeground(Color.white);
+		playerMap.mapPiece[i][j].setText("X");
 
 		return false;
 	}
 
 	private void hitRandom() {
-//		if (isPlayer) return;
 		Random rd = new Random();
 		int i = rd.nextInt(10) + 1;
 		int j = rd.nextInt(10) + 1;
@@ -178,8 +296,8 @@ public class PlayGame extends Container implements ActionListener {
 			}
 			isPlayer = true;
 			return;
-		}
-		else hitRandom();
+		} else
+			hitRandom();
 	}
 
 	private void addAction() {
@@ -190,64 +308,83 @@ public class PlayGame extends Container implements ActionListener {
 			}
 		}
 	}
-	
-	public boolean isPlayerWin() {
-		if (playerHit == sumPoint) return true;
+
+	private boolean isPlayerWin() {
+		if (playerHit == sumPoint)
+			return true;
 		return false;
 	}
-	
-	public boolean isComputerWin() {
-		if (computerHit == sumPoint) return true;
+
+	private boolean isComputerWin() {
+		if (computerHit == sumPoint)
+			return true;
 		return false;
 	}
-	
-	public void checkDeadOnComputerMap() {
+
+	private void checkDeadOnComputerMap() {
+		int cnt = 0;
 		for (String s : B) {
-			if (s == "") continue;
+			if (s == "")
+				continue;
 			int x = Integer.parseInt(s);
-			int leng = x/10000;
-			int j = (x - leng*10000)/100;
+			int leng = x / 10000;
+			int j = (x - leng * 10000) / 100;
 			int i = x % 100;
 			boolean c = true;
-//			System.out.println(leng + " " + i + " " + j);
+
 			for (int t = 0; t < leng; t++) {
-				if (!markP[i][j + t]) c = false;
-//				System.out.println("isShip[" + i + "," + (j+t) + " = " + computerMap.isShip[i][j + t]);
+				if (!markP[i][j + t])
+					c = false;
 			}
-			if (!c) continue;
-//			System.out.println("Dead");
+			if (!c)
+				continue;
+			cnt++;
 			for (int t = 0; t < leng; t++) {
-				computerMap.mapPiece[i][j + t].setIcon(new ImageIcon(loadImage("src\\img\\" + leng + (t+1) + ".png", 56,56)));
+				computerMap.mapPiece[i][j + t]
+						.setIcon(new ImageIcon(loadImage("src\\img\\" + leng + (t + 1) + ".png", 56, 46)));
 			}
 		}
+		shipDeadByPlayer = cnt;
 	}
-	
-	
-	public void checkDeadOnPlayerMap() {
+
+	private void checkDeadOnPlayerMap() {
+		int cnt = 0;
 		for (String s : A) {
-			if (s == "") continue;
+			if (s == "")
+				continue;
 			int x = Integer.parseInt(s);
-			int leng = x/10000;
-			int j = (x - leng*10000)/100;
+			int leng = x / 10000;
+			int j = (x - leng * 10000) / 100;
 			int i = x % 100;
 			boolean c = true;
-//			System.out.println(leng + " " + i + " " + j);
+
 			for (int t = 0; t < leng; t++) {
-				if (!markC[i][j + t]) c = false;
-//				System.out.println("isShip[" + i + "," + (j+t) + " = " + computerMap.isShip[i][j + t]);
+				if (!markC[i][j + t])
+					c = false;
+
 			}
-			if (!c) continue;
-//			System.out.println("Dead");
+			if (!c)
+				continue;
+			cnt++;
 			for (int t = 0; t < leng; t++) {
-				playerMap.mapPiece[i][j + t].setIcon(new ImageIcon(loadImage("src\\img\\" + leng + (t+1) + ".png", 56,56)));
+				playerMap.mapPiece[i][j + t]
+						.setIcon(new ImageIcon(loadImage("src\\img\\" + leng + (t + 1) + ".png", 56, 46)));
 			}
 		}
+		shipDeadByComputer = cnt;
 	}
-	
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+
+		if ("back".equals(e.getActionCommand())) {
+			MainMenu menu = new MainMenu(1120, 690);
+			frame.setVisible(false);
+			menu.menu2();
+			return;
+		}
+
 		if (!isPlayer)
 			return;
 		int x = Integer.parseInt(e.getActionCommand());
@@ -257,33 +394,102 @@ public class PlayGame extends Container implements ActionListener {
 			return;
 		}
 		markP[i][j] = true;
+		currentPlayer++;
 		if (computerMap.isShip[i][j]) {
 			computerMap.mapPiece[i][j].setIcon(hit);
 			playerHit++;
 			checkDeadOnComputerMap();
 //			System.out.println("Player: " + playerHit);
-		} else
-			computerMap.mapPiece[i][j].setIcon(miss);
+		} else {
+//			computerMap.mapPiece[i][j].setIcon(miss);
+			computerMap.mapPiece[i][j].setFont(new Font("Arial", Font.PLAIN, 30));
+			computerMap.mapPiece[i][j].setForeground(Color.white);
+			computerMap.mapPiece[i][j].setText("X");
+		}
 		isPlayer = false;
-		
-		
+		update();
+
 		if (isPlayerWin()) {
 			JOptionPane.showMessageDialog(this, "You Win!!!");
+			gameOver(true);
 		}
-		
+
 		try {
-			Thread.sleep(50);
+			Thread.sleep(10);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		if (isHard) hitRandomHard();
-		else hitRandom();
-		
+		if (isHard)
+			hitRandomHard();
+		else
+			hitRandom();
+
 		checkDeadOnPlayerMap();
 		if (isComputerWin()) {
 			JOptionPane.showMessageDialog(this, "You Lose!!!");
+			gameOver(false);
 		}
+		update();
+	}
+
+	private void gameOver(boolean isPlayerWin) {
+		setHighScore();
+		turnComputer.remove(turnC);
+		turnComputer.remove(curC);
+		turnComputer.remove(hitC);
+		turnComputer.remove(shipDeadC);
+		turnComputer.remove(ratioC);
+		turnComputer.remove(pointC);
+		turnComputer.setLayout(new GridLayout(2, 1));
+
+		JLabel over = new JLabel("", SwingConstants.CENTER);
+		if (isPlayerWin) {
+			over.setText("YOU WIN");
+			over.setForeground(Color.decode("#EB5A37"));
+			over.setFont(new Font("Arial", Font.PLAIN, 20));
+		} else {
+			over.setText("YOU LOSE");
+			over.setForeground(Color.decode("#EB5A37"));
+			over.setFont(new Font("Arial", Font.PLAIN, 20));
+		}
+
+		back.setText("Quay về Menu");
+		turnComputer.add(over);
+		turnComputer.add(back);
+		back.setBackground(Color.decode("#D2EDFE"));
+		back.setBorder(new LineBorder(Color.decode("#D2EDFE")));
+		back.setActionCommand("back");
+		back.addActionListener(this);
+	}
+
+	private void setHighScore() {
+		File file = new File("src\\HighScore\\highscore.txt");
+		int[] A = new int[6];
+		try {
+			Scanner scan = new Scanner(file);
+			for (int i = 0; i < 5; i++) {
+				A[i] = scan.nextInt();
+//				System.out.println(A[i]);
+			}
+			scan.close();
+			A[5] = playerPoint;
+			Arrays.parallelSort(A);
+			file.delete();
+			file.createNewFile();
+		} catch (Exception e) {
+			System.out.println("File not found");
+		}
+		String s = "" + A[1] + " " + A[2] + " " + A[3] + " " + A[4] + " " + A[5];
+        try {
+            FileWriter fw = new FileWriter("src\\HighScore\\highscore.txt");
+            fw.write(s);
+            fw.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    
 	}
 
 	private Image loadImage(String s, int w, int h) {

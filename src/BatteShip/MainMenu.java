@@ -39,7 +39,8 @@ public class MainMenu implements ActionListener, MouseListener {
 
 	// khởi tạo Menu ban đầu
 	public MainMenu(int w, int h) {
-		frame = new JFrame();
+		frame = new JFrame("Battle Ship");
+		frame.setIconImage(loadImage("src\\img\\logo.png",90,90));
 		frame.setSize(w, h);
 		welcome = new JLabel();
 		welcome.setSize(w, h);
@@ -50,7 +51,7 @@ public class MainMenu implements ActionListener, MouseListener {
 		ImageIcon playIcon = new ImageIcon(loadImage("src\\img\\play.jpg", 80, 50));
 		play.setIcon(playIcon);
 		play.setBounds(w / 2 - 40, 3 * h / 4, 80, 50);
-//		this.setLayout(new BorderLayout());
+
 		introIcon = new ImageIcon(loadImage("src\\img\\Title.png", w, h));
 		welcome.add(play);
 		welcome.setIcon(introIcon);
@@ -64,7 +65,7 @@ public class MainMenu implements ActionListener, MouseListener {
 	}
 
 	// menu chứa các lựa chọn: exit, start, sound, highScore,...
-	private void menu2() {
+	public void menu2() {
 		menu = new JLabel();
 		menu.setSize(1120, 690);
 		menu.setIcon(new ImageIcon(loadImage("src\\img\\background.png", 1120, 690)));

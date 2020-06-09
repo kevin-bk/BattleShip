@@ -1,5 +1,6 @@
 package BatteShip;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -32,7 +33,8 @@ public class SmallMap extends JPanel {
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
 				mapPiece[i][j] = new JButton(); // chưa có action
-				mapPiece[i][j].setIcon(icon);
+//				mapPiece[i][j].setIcon(icon);
+				mapPiece[i][j].setBackground(Color.decode("#114D73"));
 				this.add(mapPiece[i][j]);
 			}
 		}
