@@ -58,17 +58,19 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public static int yRandom;
 	public JFrame frame;
 	public static boolean isHard; // chế độ khó hay dễ
-	
-	public static ArrayList <String> A ; //aray lưu tọa độ tàu của người chơi
-	public static ArrayList <String> B; // lưu tọa độ tàu của computer
-	
+
+	public static ArrayList<String> A; // aray lưu tọa độ tàu của người chơi
+	public static ArrayList<String> B; // lưu tọa độ tàu của computer
+
 	public Creator(int w, int h, int numShip3, int numShip2, int numShip1, String gamemode) {
 		super();
 		this.setSize(w, h);
-		
-		if (gamemode == "easy") isHard = false;
-		else isHard = true;
-		
+
+		if (gamemode == "easy")
+			isHard = false;
+		else
+			isHard = true;
+
 		// shipmap
 		map = new JLabel();
 		map.setIcon(new ImageIcon(loadImage("src\\img\\bigMap.png", 560, 560)));
@@ -82,12 +84,12 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		nShip3 = numShip3;
 
 		numShip = x;
-		
-		A = new ArrayList <String>();
-		B = new ArrayList <String>();
+
+		A = new ArrayList<String>();
+		B = new ArrayList<String>();
 		A.add("");
 		B.add("");
-		
+
 		shipArray = new Ship[x + 1];
 		xS = new int[x + 1];
 		yS = new int[x + 1];
@@ -172,24 +174,20 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		start = new JButton();
 		back = new JButton();
 		random = new JButton("Random");
-//		start.setFont(new Font("Arial", Font.PLAIN, 40));
-//		start.setForeground(Color.red);
-//		start.setBackground(Color.white);
-//		back.setFont(new Font("Arial", Font.PLAIN, 40));
-//		back.setForeground(Color.red);
+
 		back.setBackground(Color.decode("#D2EDFE"));
 		back.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		start.setBackground(Color.decode("#D2EDFE"));
 		start.setBorder(new LineBorder(Color.decode("#D2EDFE")));
-		back.setIcon(new ImageIcon(loadImage("src\\img\\back.png",50,50)));
-		start.setIcon(new ImageIcon(loadImage("src\\img\\next.png",50,50)));
-		
+		back.setIcon(new ImageIcon(loadImage("src\\img\\back.png", 50, 50)));
+		start.setIcon(new ImageIcon(loadImage("src\\img\\next.png", 50, 50)));
+
 		random.setFont(new Font("Arial", Font.PLAIN, 30));
 		random.setBackground(Color.decode("#D2EDFE"));
 		random.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		random.setForeground(Color.red);
-		
-		// add action 
+
+		// add action
 		random.setActionCommand("random");
 		random.addActionListener(this);
 		back.setActionCommand("back");
@@ -201,23 +199,11 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		this.add(random);
 		this.add(start);
 		for (int i = 1; i <= x; i++) {
-//			shipMap.add(ship[i]);
 			this.add(ship[i]);
 		}
-
-//		int xB = 100;
-//		int yB = 50;
-//		back.setIcon(new ImageIcon(loadImage("src\\img\\back.png",xB,yB)));
-//		start.setIcon(new ImageIcon(loadImage("src\\img\\start.png",xB,yB)));
-//		random.setIcon(new ImageIcon(loadImage("src\\img\\random.png",xB,yB)));
 		start.setSize(50, 50);
 		back.setSize(50, 50);
 		random.setSize(100, 50);
-//		JLabel lb1 = new JLabel("                       ");
-//		lb1.setSize(400, 200);
-
-//		test.add(lb1);
-
 
 		this.add(map);
 
@@ -244,107 +230,74 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 //		System.out.println("i = " + i + " j = " + j);
 
 		int leng = lengShip[tmp];
-		if (isNgang[tmp]) {
-			if ((x + leng * 50 > xRight && leng > 1) || (leng == 1 && x > xRight)) {
-				ship[tmp].setLocation(xStart, yStart);
-				return false;
+
+		if ((x + leng * 50 > xRight && leng > 1) || (leng == 1 && x > xRight)) {
+			ship[tmp].setLocation(xStart, yStart);
+
+			int u = (xStart - xLeft) / 56 + 1;
+			int v = (yStart - yUp) / 56 + 1;
+			for (int t = 0; t < leng; t++) {
+				M[u + t][v] = true;
 			}
 
-			for (int t = 0; t < leng; t++)
-				if (M[i + t][j]) {
-					ship[tmp].setLocation(xStart, yStart);
-					return false;
-				}
-
-			if (leng > 1) {
-				ship[tmp].setLocation(x, y);
-			} else
-				ship[tmp].setLocation(x - 10, y);
-			for (int t = 0; t < leng; t++)
-				M[i + t][j] = true;
-			
-			int v = (Integer.parseInt(A.get(tmp)))/10000;
-			A.set(tmp, "" + (v * 10000 + i * 100 + j));
-//			if (xStart < xLeft || xStart > xRight || yStart < yUp || yStart > yDown)
-//				return true;
-//			int p = (xStart - xLeft) / 56 + 1;
-//			int q = (yStart - yUp) / 56 + 1;
-//			for (int t = 0; t < leng; t++)
-//				M[p + t][q] = false;
-
-//				System.out.println("p = " + p + " q = " + q);
-			return true;
+			return false;
 		}
 
-//		// tàu nằm dọc
-//		if ((y + leng * 50 > yDown && leng > 1) || (leng == 1 && y > yDown)) {
-//			ship[tmp].setLocation(xStart, yStart);
-//			return false;
-//		}
-//		int t1 = 0, t2 = 0, t3 = 0, cnt = 1;
-//		int[] a = new int[4];
-//		a[1] = 0;
-//		a[2] = 0;
-//		a[3] = 0;
-//		if (xStart >= xLeft && xStart <= xRight && yStart >= yUp && yStart <= yDown) {
-//			int u = (xStart - xLeft) / 56 + 1;
-//			int v = (yStart - yUp) / 56 + 1;
-//			if (u == i) {
-//				for (int t = 0; t < leng; t++) {
-//					for (int w = 0; w < leng; w++) {
-//						if (v + t == j + w)
-//							a[++cnt] = v + t;
-//					}
-//				}
-//				t1 = a[1];
-//				t2 = a[2];
-//				t3 = a[3];
-//			}
-//
-//		}
-//
-//		for (int t = 0; t < leng; t++)
-//			if (M[i][j + t] && (j + t != t1) && (j + t != t2) && (j + t) != t3) {
-//				ship[tmp].setLocation(xStart, yStart);
-//				return false;
-//			}
-//
-//		ship[tmp].setLocation(x, y);
-//		for (int t = 0; t < leng; t++)
-//			M[i][j + t] = true;
-//		if (xStart < xLeft || xStart > xRight || yStart < yUp || yStart > yDown)
-//			return true;
-//		int p = (xStart - xLeft) / 56;
-//		int q = (yStart - yUp) / 56;
-//		for (int t = 0; t < leng; t++)
-//			M[p][q + t] = false;
+		for (int t = 0; t < leng; t++) {
+			if (M[i + t][j] == true) {
+				ship[tmp].setLocation(xStart, yStart);
+				
+				int u = (xStart - xLeft) / 56 + 1;
+				int v = (yStart - yUp) / 56 + 1;
+				for (int q = 0; q < leng; q++) {
+					M[u + q][v] = true;
+				}
+				
+				return false;
+			}
+		}
+
+		if (leng > 1) {
+			ship[tmp].setLocation(x, y);
+		} else {
+			ship[tmp].setLocation(x - 10, y);
+		}
+		for (int t = 0; t < leng; t++) {
+			M[i + t][j] = true;
+		}
+
+		int v = (Integer.parseInt(A.get(tmp))) / 10000;
+		A.set(tmp, "" + (v * 10000 + i * 100 + j));
+
+//		System.out.println("put ship " + tmp + " leng " + leng + " in " + i + " ," + j);
 		return true;
 	}
 
 	public boolean putForRandom(int tmp, int x, int y, int i, int j, int leng, boolean isForPlayer) {
-		if (x + 50 * leng > xRight && leng > 1) return false;
+		if (x + 50 * leng > xRight && leng > 1)
+			return false;
 		for (int t = 0; t < leng; t++) {
-			if (M[i + t][j]) return false;
+			if (M[i + t][j] == true)
+				return false;
 		}
-		
-		for (int t = 0; t < leng; t++) M[i + t][j] = true;
+
+		for (int t = 0; t < leng; t++) {
+			M[i + t][j] = true;
+		}
 		ship[tmp].setLocation(x, y);
-		
+
 		if (isForPlayer) {
-			int v = (Integer.parseInt(A.get(tmp)))/10000;
-//			System.out.println("v = " + v);
+			int v = (Integer.parseInt(A.get(tmp))) / 10000;
 			A.set(tmp, "" + (v * 10000 + i * 100 + j));
-		}
-		else {
-			int v = (Integer.parseInt(B.get(tmp)))/10000;
+		} else {
+			int v = (Integer.parseInt(B.get(tmp))) / 10000;
 			B.set(tmp, "" + (v * 10000 + i * 100 + j));
 		}
-		
+
 		return true;
 	}
-	
+
 	public void setRandom(boolean isForPlayer) {
-//		System.out.println("Random!");
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
 				M[i][j] = false;
@@ -365,10 +318,11 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			int y = yUp + 56 * j + 5;
 			xStart = xS[cnt];
 			yStart = yS[cnt];
-			
+
 			boolean is = true;
-			if (!isForPlayer) is = false;
-			
+			if (!isForPlayer)
+				is = false;
+
 			boolean c = putForRandom(cnt, x, y, i + 1, j + 1, lengShip[cnt], is);
 			if (c) {
 //				System.out.println("Put ship " + cnt + " at " + (i + 1) + ", " + (j + 1));
@@ -379,7 +333,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 //		for (int i = 1; i <= 10; i++) {
 //			for (int j = 1; j <= 10; j++) {
-//				if (M[i][j])
+//				if (M[j][i])
 //					System.out.print("1 ");
 //				else
 //					System.out.print("0 ");
@@ -389,52 +343,10 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 //		System.out.println("================");
 	}
 
-//	public void rotate(int tmp, int x, int y, int i, int j) {
-//		System.out.println("i = " + i + " j = " + j);
-//		int leng = lengShip[tmp];
-//		// ngang -> dọc
-//		if (isNgang[tmp]) {
-//			if (y + leng * 50 > yDown && leng > 1)
-//				return;
-//			for (int t = 1; t < leng; t++) {
-//				if (M[i][j + t])
-//					return;
-//			}
-//
-//			for (int t = 1; t < leng; t++) {
-//				M[i][j + t] = true;
-//				M[i + t][j] = false;
-//			}
-////			ship[tmp].setSize(50, leng * 50);
-////			ship[tmp].setIcon(new ImageIcon(shipArray[tmp].getShipRorate()));
-////			ship[tmp].setLocation(x, y);
-//			isNgang[tmp] = false;
-//			return;
-//		}
-//
-//		// dọc -> ngang
-//
-//		if (x + leng * 50 > xRight && leng > 1)
-//			return;
-//		for (int t = 1; t < leng; t++)
-//			if (M[i + t][j])
-//				return;
-//
-//		ship[tmp].setSize(leng * 50, 50);
-//		ship[tmp].setIcon(new ImageIcon(shipArray[tmp].getShipRorate()));
-//		ship[tmp].setLocation(x, y);
-//		isNgang[tmp] = true;
-//		for (int t = 1; t < leng; t++) {
-//			M[i][j + t] = false;
-//			M[i + t][j] = true;
-//		}
-//		return;
-//	}
-
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-//		System.out.println("Drag");
+
 		if (xStart >= xLeft && xStart <= xRight && yStart >= yUp && yStart <= yDown) {
 			int i = (xStart - xLeft) / 56 + 1;
 			int j = (yStart - yUp) / 56 + 1;
@@ -446,7 +358,9 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 				}
 			}
 			int leng = lengShip[tmp];
-			for (int t = 0; t < leng; t++) M[i + t][j] = false;
+			for (int t = 0; t < leng; t++) {
+				M[i + t][j] = false;
+			}
 		}
 
 		int xNew = e.getX() + e.getComponent().getX() - X;
@@ -487,8 +401,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			return;
 		}
 
-		int i = (xNew + 10 - xLeft) / 56;
-		int j = (yNew + 5 - yUp) / 56;
+		int i = (xNew - xLeft) / 56;
+		int j = (yNew - yUp) / 56;
 		xNew = xLeft + i * 56 + 10;
 		yNew = yUp + j * 56 + 3; // tàu sẽ ở ô i+1 và j+1
 		int tmp = 0;

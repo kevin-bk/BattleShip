@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 
 public class MainMenu implements ActionListener, MouseListener {
 	private JFrame frame;
+	
 	private JLabel welcome; // nền khi bắt đầu game
 	private ImageIcon introIcon; // nền khi vào game
 	public JButton play; // kèm nền khi vào game

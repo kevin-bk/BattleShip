@@ -47,19 +47,6 @@ public class SmallMap extends JPanel {
 		}
 	}
 
-	// setShip: đặt con tàu vào map, bắt đầu từ x,y, dài length, isNgang: tàu ngang
-	// hay dọc
-	public void setShip(int x, int y, int length, boolean isNgang) {
-		if (isNgang) {
-			for (int i = 0; i < length; i++) {
-				isShip[x + i][y] = true;
-			}
-		} else {
-			for (int i = 0; i < length; i++) {
-				isShip[x][y + i] = true;
-			}
-		}
-	}
 
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
