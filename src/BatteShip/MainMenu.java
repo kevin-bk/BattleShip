@@ -157,6 +157,7 @@ public class MainMenu implements ActionListener, MouseListener {
 			numShip[i].setActionCommand("2");
 			numShip[i].addActionListener(this);
 		}
+		numShip[1].setText("2");
 		select.add(back);
 		select.add(next);
 		
@@ -221,7 +222,7 @@ public class MainMenu implements ActionListener, MouseListener {
 			String s = numShip[1].getText();
 			if (s == "1") numShip[1].setText("2");
 			if (s == "2") numShip[1].setText("3");
-			if (s == "3") numShip[1].setText("1");
+			if (s == "3") numShip[1].setText("2");
 		}
 		
 		if (e.getSource() == numShip[2]) {

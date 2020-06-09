@@ -234,10 +234,12 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		if ((x + leng * 50 > xRight && leng > 1) || (leng == 1 && x > xRight)) {
 			ship[tmp].setLocation(xStart, yStart);
 
-			int u = (xStart - xLeft) / 56 + 1;
-			int v = (yStart - yUp) / 56 + 1;
-			for (int t = 0; t < leng; t++) {
-				M[u + t][v] = true;
+			if (xStart >= xLeft && xStart <= xRight && yStart >= yUp && yStart <= yDown) {
+				int u = (xStart - xLeft) / 56 + 1;
+				int v = (yStart - yUp) / 56 + 1;
+				for (int q = 0; q < leng; q++) {
+					M[u + q][v] = true;
+				}
 			}
 
 			return false;
@@ -246,13 +248,15 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		for (int t = 0; t < leng; t++) {
 			if (M[i + t][j] == true) {
 				ship[tmp].setLocation(xStart, yStart);
-				
-				int u = (xStart - xLeft) / 56 + 1;
-				int v = (yStart - yUp) / 56 + 1;
-				for (int q = 0; q < leng; q++) {
-					M[u + q][v] = true;
+
+				if (xStart >= xLeft && xStart <= xRight && yStart >= yUp && yStart <= yDown) {
+					int u = (xStart - xLeft) / 56 + 1;
+					int v = (yStart - yUp) / 56 + 1;
+					for (int q = 0; q < leng; q++) {
+						M[u + q][v] = true;
+					}
 				}
-				
+
 				return false;
 			}
 		}
