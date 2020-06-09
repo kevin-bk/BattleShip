@@ -14,18 +14,16 @@ public class Sound {
       frame.setSize(300, 200);
       frame.setVisible(true);
       
-      playSound("/sound/winner.wav");
+      playSound("/sound/sound.wav");
    }
  
    private void playSound(String link) {
 	      try {
-	          // Open an audio input stream.
 	          URL url = this.getClass().getResource(link);
 	          AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-	          // Get a sound clip resource.
 	          Clip clip = AudioSystem.getClip();
-	          // Open audio clip and load samples from the audio input stream.
 	          clip.open(audioIn);
+	          clip.loop(clip.LOOP_CONTINUOUSLY);
 	          clip.start();
 	       } catch (UnsupportedAudioFileException e) {
 	          e.printStackTrace();
