@@ -14,13 +14,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -65,11 +72,13 @@ public class PlayGame extends Container implements ActionListener {
 	private static int currentPlayer = 0; // số điểm đã bắn của player
 	private static int currentComputer = 0;
 	private static int playerPoint = 0, computerPoint = 0, shipDeadByPlayer = 0, shipDeadByComputer = 0;
-
+	private Clip clip;
+	private static boolean isPlaySound;
+	
 	public PlayGame(int w, int h, SmallMap player, SmallMap computer, boolean gamemode, ArrayList<String> pl,
-			ArrayList<String> cm) {
+			ArrayList<String> cm, boolean playSound) {
 		super();
-
+		isPlaySound = playSound;
 		if (gamemode)
 			isHard = true;
 		else
@@ -153,6 +162,8 @@ public class PlayGame extends Container implements ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setVisible(true);
+		playSound("/sound/sound.wav");
+		if (!isPlaySound) clip.stop();
 	}
 
 	private void init() {
@@ -372,8 +383,9 @@ public class PlayGame extends Container implements ActionListener {
 		// TODO Auto-generated method stub
 
 		if ("back".equals(e.getActionCommand())) {
-			MainMenu menu = new MainMenu(1120, 690);
+			MainMenu menu = new MainMenu(1120, 690, isPlaySound);
 			frame.setVisible(false);
+			clip.stop();
 			menu.menu2();
 			return;
 		}
@@ -494,5 +506,22 @@ public class PlayGame extends Container implements ActionListener {
 		Image dimg = i.getScaledInstance(w, h, Image.SCALE_SMOOTH); // thay doi kich thuoc anh
 		return dimg;
 
+	}
+	
+	private void playSound(String link) {
+		try {
+			URL url = this.getClass().getResource(link);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.loop(clip.LOOP_CONTINUOUSLY);
+			clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 }

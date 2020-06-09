@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class MainMenu implements ActionListener, MouseListener {
 
 	private JLabel welcome; // nền khi bắt đầu game
 	private ImageIcon introIcon; // nền khi vào game
-	public JButton play; // kèm nền khi vào game
+	private JButton play; // kèm nền khi vào game
 
 	private JLabel menu; // phần menu tiếp theo (gồm các thành phần bên dưới)
 	private JButton exit;
@@ -43,17 +44,20 @@ public class MainMenu implements ActionListener, MouseListener {
 	private JButton sound;
 	private JLabel showScore; // show điểm cao
 	private JLabel[] score;
+	private JButton resetScore;
 
 	private JLabel select; // phần menu thứ 3, khi ấn start sẽ hiện ra để chọn số lượng tàu
 	private JLabel ship[]; // mảng chứa các hình ảnh tàu
 	private JButton numShip[];
 	private JButton back, next;
-	public Creator creator;
-	public Clip clip;
+	private Creator creator;
+	private Clip clip;
+	private static boolean isPlaySound;
 
 	// khởi tạo Menu ban đầu
-	public MainMenu(int w, int h) {
+	public MainMenu(int w, int h, boolean playSound) {
 		frame = new JFrame("Battle Ship");
+		isPlaySound = playSound;
 		frame.setIconImage(loadImage("src\\img\\logo.png", 90, 90));
 		frame.setSize(w, h);
 		welcome = new JLabel();
@@ -77,6 +81,7 @@ public class MainMenu implements ActionListener, MouseListener {
 		frame.setResizable(false);
 		frame.setVisible(true);
 		playSound("/sound/sound.wav");
+		if (!isPlaySound) clip.stop();
 	}
 
 	// menu chứa các lựa chọn: exit, start, sound, highScore,...
@@ -137,14 +142,19 @@ public class MainMenu implements ActionListener, MouseListener {
 		numShip[1].setText("2");
 		showScore = new JLabel();
 		score = new JLabel[6];
-		score[0] = new JLabel("",SwingConstants.CENTER);
+		score[0] = new JLabel("");
 		showScore.add(score[0]);
-		showScore.setLayout(new GridLayout(6, 1));
+		showScore.setLayout(new GridLayout(7, 1));
 		for (int i = 1; i < 6; i++) {
-			score[i] = new JLabel("", SwingConstants.CENTER);
+			score[i] = new JLabel("");
 			showScore.add(score[i]);
 		}
-		showScore.setBounds(530, 180, 60, 180);
+		resetScore = new JButton("RESET");
+		resetScore.setActionCommand("reset");
+		resetScore.addActionListener(this);
+		showScore.add(resetScore);
+		showScore.setBounds(510, 180, 100, 180);
+		showScore.setVisible(false);
 		menu.add(showScore);
 		// gỡ welcome, cài menu
 		welcome.setVisible(false);
@@ -194,6 +204,7 @@ public class MainMenu implements ActionListener, MouseListener {
 	}
 
 	private void showHighScore() {
+		showScore.setVisible(true);
 		File file = new File("src\\HighScore\\highscore.txt");
 		int[] A = new int[6];
 		try {
@@ -211,7 +222,18 @@ public class MainMenu implements ActionListener, MouseListener {
 			score[i].setText("" + i +". " + A[i]);
 		}
 	}
-
+	
+	private void resetHighScore() {
+		String s = "0 0 0 0 0";
+		try {
+			FileWriter fw = new FileWriter("src\\HighScore\\highscore.txt");
+			fw.write(s);
+			fw.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
 		try {
@@ -256,6 +278,7 @@ public class MainMenu implements ActionListener, MouseListener {
 		if ("sound on".equals(e.getActionCommand())) {
 			sound.setIcon(new ImageIcon(loadImage("src\\img\\musicOff.png", 78, 65)));
 			sound.setActionCommand("sound off");
+			isPlaySound = false;
 			clip.stop();
 		}
 
@@ -264,6 +287,7 @@ public class MainMenu implements ActionListener, MouseListener {
 			sound.setActionCommand("sound on");
 			clip.start();
 			clip.loop(clip.LOOP_CONTINUOUSLY);
+			isPlaySound = true;
 		}
 
 		if ("start".equals(e.getActionCommand())) {
@@ -325,7 +349,8 @@ public class MainMenu implements ActionListener, MouseListener {
 			int n1 = Integer.parseInt(numShip[1].getText());
 			int n2 = Integer.parseInt(numShip[2].getText());
 			int n3 = Integer.parseInt(numShip[3].getText());
-			creator = new Creator(1120, 690, n3, n2, n1, gamemode.getActionCommand());
+			clip.stop();
+			creator = new Creator(1120, 690, n3, n2, n1, gamemode.getActionCommand(),isPlaySound);
 			creator.back.setActionCommand("back");
 			creator.back.addActionListener(this);
 			frame.setVisible(false);
@@ -333,8 +358,16 @@ public class MainMenu implements ActionListener, MouseListener {
 
 		if ("back".equals(e.getActionCommand())) {
 			creator.frame.setVisible(false);
+			creator.clip.stop();
 			frame.setVisible(true);
+			clip.start();
 		}
+		
+		if ("reset".equals(e.getActionCommand())) {
+			resetHighScore();
+			showHighScore();
+		}
+		
 	}
 
 	@Override

@@ -15,12 +15,19 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -61,21 +68,24 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 	public static ArrayList<String> A; // aray lưu tọa độ tàu của người chơi
 	public static ArrayList<String> B; // lưu tọa độ tàu của computer
-
-	public Creator(int w, int h, int numShip3, int numShip2, int numShip1, String gamemode) {
+	public Clip clip;
+	public static boolean isPlaySound;
+	
+	public Creator(int w, int h, int numShip3, int numShip2, int numShip1, String gamemode, boolean playSound) {
 		super();
 		this.setSize(w, h);
-
+		
+		isPlaySound = playSound;
 		if (gamemode == "easy")
 			isHard = false;
 		else
 			isHard = true;
-
+		
 		// shipmap
 		map = new JLabel();
 		map.setIcon(new ImageIcon(loadImage("src\\img\\bigMap.png", 560, 560)));
 		map.setSize(560, 560);
-
+		
 		// numShipi = số lượng tàu độ dài i
 		// x: số lượng tàu
 		int x = numShip3 + numShip2 + numShip1;
@@ -147,6 +157,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 		xRandom = random.getX();
 		yRandom = random.getY();
+		playSound("/sound/sound.wav");
+		if (!isPlaySound) clip.stop();
 	}
 
 	// hàm itit(): khởi tạo mảng M và xS,yS để random.
@@ -475,9 +487,26 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 	public void goToPlay() {
 		this.setVisible(false);
+		clip.stop();
 		frame.remove(this);
-		new PlayGame(1120, 680, playerMap, computerMap, isHard, A, B);
+		new PlayGame(1120, 680, playerMap, computerMap, isHard, A, B, isPlaySound);
 		frame.setVisible(false);
 	}
-
+	
+	private void playSound(String link) {
+		try {
+			URL url = this.getClass().getResource(link);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.loop(clip.LOOP_CONTINUOUSLY);
+			clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
 }
