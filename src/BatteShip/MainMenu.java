@@ -28,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 public class MainMenu implements ActionListener, MouseListener {
 	private JFrame frame;
@@ -50,6 +51,7 @@ public class MainMenu implements ActionListener, MouseListener {
 	private JLabel ship[]; // mảng chứa các hình ảnh tàu
 	private JButton numShip[];
 	private JButton back, next;
+	
 	private Creator creator;
 	private Clip clip;
 	private static boolean isPlaySound;
@@ -91,17 +93,22 @@ public class MainMenu implements ActionListener, MouseListener {
 		menu.setSize(1120, 690);
 		menu.setIcon(new ImageIcon(loadImage("src\\img\\blue.png", 1120, 690)));
 		// nút start
-		start = new JButton();
+		start = new JButton("BATTLE");
+		start.setFont(new Font("Arial", Font.PLAIN, 25));
 		start.setBounds(485, 511, 120, 65);
-		start.setIcon(new ImageIcon(loadImage("src\\img\\buttonStart.png", 120, 65)));
+//		start.setIcon(new ImageIcon(loadImage("src\\img\\buttonStart.png", 120, 65)));
 		start.setActionCommand("start");
 		start.addActionListener(this);
+		start.setBackground(Color.decode("#D2EDFE"));
+		start.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		// nút exit
 		exit = new JButton();
 		exit.setBounds(804, 511, 78, 65);
 		exit.setIcon(new ImageIcon(loadImage("src\\img\\exitRight.png", 78, 65)));
 		exit.setActionCommand("exit");
 		exit.addActionListener(this);
+		exit.setBackground(Color.decode("#D2EDFE"));
+		exit.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		// nút sound
 		sound = new JButton();
 		sound.setBounds(181, 511, 78, 65);
@@ -113,18 +120,25 @@ public class MainMenu implements ActionListener, MouseListener {
 			sound.setActionCommand("sound off");
 		}
 		sound.addActionListener(this);
+		sound.setBackground(Color.decode("#D2EDFE"));
+		sound.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		// nút game mode
-		gamemode = new JButton();
+		gamemode = new JButton("Độ khó: Dễ");
 		gamemode.setBounds(291, 511, 156, 65);
-		gamemode.setIcon(new ImageIcon(loadImage("src\\img\\easy.PNG", 156, 65)));
+		gamemode.setFont(new Font("Arial", Font.PLAIN, 25));
+//		gamemode.setIcon(new ImageIcon(loadImage("src\\img\\easy.PNG", 156, 65)));
 		gamemode.setActionCommand("easy");
 		gamemode.addActionListener(this);
+		gamemode.setBackground(Color.decode("#D2EDFE"));
+		gamemode.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		// nút high score
 		highScore = new JButton();
 		highScore.setBounds(643, 511, 100, 65);
 		highScore.setIcon(new ImageIcon(loadImage("src\\img\\trophy.png", 100, 65)));
-		highScore.setActionCommand("highScore");
+		highScore.setActionCommand("highScore off");
 		highScore.addActionListener(this);
+		highScore.setBackground(Color.decode("#D2EDFE"));
+		highScore.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 
 		menu.add(sound);
 		menu.add(start);
@@ -158,6 +172,8 @@ public class MainMenu implements ActionListener, MouseListener {
 		resetScore = new JButton("RESET");
 		resetScore.setActionCommand("reset");
 		resetScore.addActionListener(this);
+		resetScore.setBackground(Color.decode("#D2EDFE"));
+		resetScore.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		showScore.add(resetScore);
 		showScore.setBounds(510, 180, 100, 180);
 		showScore.setVisible(false);
@@ -224,8 +240,12 @@ public class MainMenu implements ActionListener, MouseListener {
 		}
 
 		score[0].setText("Điểm cao: ");
+		score[0].setForeground(Color.decode("#EB5A37"));
+		score[0].setFont(new Font("Arial", Font.PLAIN, 20));
 		for (int i = 1; i < 6; i++) {
 			score[i].setText("" + i + ". " + A[i]);
+			score[i].setForeground(Color.decode("#EB5A37"));
+			score[i].setFont(new Font("Arial", Font.PLAIN, 20));
 		}
 	}
 
@@ -300,17 +320,25 @@ public class MainMenu implements ActionListener, MouseListener {
 			menu3();
 		}
 
-		if ("highScore".equals(e.getActionCommand())) {
+		if ("highScore off".equals(e.getActionCommand())) {
 			showHighScore();
+			highScore.setActionCommand("highScore on");
 		}
-
+		
+		if ("highScore on".equals(e.getActionCommand())) {
+			showScore.setVisible(false);
+			highScore.setActionCommand("highScore off");
+		}
+		
 		if ("easy".equals(e.getActionCommand())) {
-			gamemode.setIcon(new ImageIcon(loadImage("src\\img\\hard.PNG", 156, 65)));
+			gamemode.setText("Độ khó: Khó");
+//			gamemode.setIcon(new ImageIcon(loadImage("src\\img\\hard.PNG", 156, 65)));
 			gamemode.setActionCommand("hard");
 		}
 
 		if ("hard".equals(e.getActionCommand())) {
-			gamemode.setIcon(new ImageIcon(loadImage("src\\img\\easy.PNG", 156, 65)));
+			gamemode.setText("Độ khó: Dễ");
+//			gamemode.setIcon(new ImageIcon(loadImage("src\\img\\easy.PNG", 156, 65)));
 			gamemode.setActionCommand("easy");
 		}
 
@@ -366,7 +394,9 @@ public class MainMenu implements ActionListener, MouseListener {
 			creator.frame.setVisible(false);
 			creator.clip.stop();
 			frame.setVisible(true);
+			if (isPlaySound) {
 			clip.start();
+			}
 		}
 
 		if ("reset".equals(e.getActionCommand())) {

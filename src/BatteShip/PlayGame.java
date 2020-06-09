@@ -53,7 +53,7 @@ public class PlayGame extends Container implements ActionListener {
 	private JLabel turnPlayer; // hiển thị turn của player
 	private JLabel turnComputer;
 	private JLabel turnP, turnC, curP, curC, hitP, hitC, pointP, pointC, ratioP, ratioC, shipDeadP, shipDeadC;
-	private JButton back; // quay về menu khi win/lose
+	private JButton back, backIgnore; // quay về menu khi win/lose
 
 	private ImageIcon miss; // bắn trượt
 	private ImageIcon hit; // bắn trúng
@@ -115,6 +115,11 @@ public class PlayGame extends Container implements ActionListener {
 		ratioC = new JLabel("", SwingConstants.CENTER);
 		shipDeadP = new JLabel("", SwingConstants.CENTER);
 		shipDeadC = new JLabel("", SwingConstants.CENTER);
+		backIgnore = new JButton("Quay về Menu");
+		backIgnore.setActionCommand("backIgnore");
+		backIgnore.setBackground(Color.decode("#D2EDFE"));
+		backIgnore.setBorder(new LineBorder(Color.decode("#D2EDFE")));
+		backIgnore.addActionListener(this);
 		turnPlayer.setLayout(new GridLayout(3, 2));
 		turnComputer.setLayout(new GridLayout(3, 2));
 
@@ -130,7 +135,8 @@ public class PlayGame extends Container implements ActionListener {
 		turnComputer.add(hitC);
 		turnComputer.add(ratioC);
 		turnComputer.add(shipDeadC);
-		turnComputer.add(pointC);
+//		turnComputer.add(pointC);
+		turnComputer.add(backIgnore);
 		panel2.add(turnPlayer);
 		panel2.add(turnComputer);
 
@@ -381,7 +387,15 @@ public class PlayGame extends Container implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-
+		
+		if ("backIgnore".equals(e.getActionCommand())) {
+			MainMenu menu = new MainMenu(1120, 690, isPlaySound);
+			frame.setVisible(false);
+			clip.stop();
+			menu.menu2();
+			return;
+		}
+		
 		if ("back".equals(e.getActionCommand())) {
 			MainMenu menu = new MainMenu(1120, 690, isPlaySound);
 			frame.setVisible(false);
@@ -484,7 +498,7 @@ public class PlayGame extends Container implements ActionListener {
 		} catch (Exception e) {
 			System.out.println("File not found");
 		}
-		String s = "" + A[1] + " " + A[2] + " " + A[3] + " " + A[4] + " " + A[5];
+		String s = "" + A[5] + " " + A[4] + " " + A[3] + " " + A[2] + " " + A[1];
 		try {
 			FileWriter fw = new FileWriter("src\\HighScore\\highscore.txt");
 			fw.write(s);
