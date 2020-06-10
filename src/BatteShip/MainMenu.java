@@ -25,9 +25,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
-public class MainMenu implements ActionListener, MouseListener {
+public class MainMenu implements ActionListener {
 	private JFrame frame;
 
 	private JLabel welcome; // nền khi bắt đầu game
@@ -72,7 +73,6 @@ public class MainMenu implements ActionListener, MouseListener {
 		introIcon = new ImageIcon(loadImage("/img/Title.png", w, h));
 		welcome.add(play);
 		welcome.setIcon(introIcon);
-		welcome.addMouseListener(this);
 		frame.add(welcome);
 
 		frame.setLocationRelativeTo(null);
@@ -187,7 +187,6 @@ public class MainMenu implements ActionListener, MouseListener {
 		select = new JLabel();
 		select.setSize(1120, 690);
 		select.setIcon(new ImageIcon(loadImage("/img/blue.png", 1120, 690)));
-		select.addMouseListener(this);
 		ship = new JLabel[4];
 
 		next.setIcon(new ImageIcon(loadImage("/img/arrowRight.png", 50, 50)));
@@ -225,9 +224,14 @@ public class MainMenu implements ActionListener, MouseListener {
 
 	private void showHighScore() {
 		showScore.setVisible(true);
-		File file = new File("src\\HighScore\\highscore.txt");
+//		URL url = MainMenu.class.getResource("/HighScore/highscore.txt");
+//		File file = new File(url.getPath());
+//		System.out.println(url.getPath());
+		File file = new File("D:/high.txt");
+
 		int[] A = new int[6];
-		try {
+		try {		
+			file.createNewFile();
 			Scanner scan = new Scanner(file);
 			for (int i = 1; i < 6; i++) {
 				A[i] = scan.nextInt();
@@ -245,12 +249,15 @@ public class MainMenu implements ActionListener, MouseListener {
 			score[i].setForeground(Color.decode("#EB5A37"));
 			score[i].setFont(new Font("Arial", Font.PLAIN, 20));
 		}
+//		JOptionPane.showMessageDialog(frame, "show " + url.getPath());
 	}
 
 	private void resetHighScore() {
 		String s = "0 0 0 0 0";
 		try {
-			FileWriter fw = new FileWriter("src\\HighScore\\highscore.txt");
+//			URL url = MainMenu.class.getResource("/HighScore/highscore.txt");
+//			FileWriter fw = new FileWriter(url.getPath());
+			FileWriter fw = new FileWriter("D:/high.txt");
 			fw.write(s);
 			fw.close();
 		} catch (Exception e) {
@@ -408,33 +415,4 @@ public class MainMenu implements ActionListener, MouseListener {
 
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-//		System.out.println(e.getX() + " " + e.getY());
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
 }

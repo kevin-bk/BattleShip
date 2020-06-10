@@ -478,27 +478,36 @@ public class PlayGame extends Container implements ActionListener {
 	}
 
 	private void setHighScore() {
-		File file = new File("src\\HighScore\\highscore.txt");
+//		JOptionPane.showMessageDialog(frame, "set ");
+//		URL url = MainMenu.class.getResource("/HighScore/highscore.txt");
+//		File file = new File(url.getPath());
+		File file = new File("D:/high.txt");
 		int[] A = new int[6];
 		try {
+			file.createNewFile();
 			Scanner scan = new Scanner(file);
 			for (int i = 0; i < 5; i++) {
-				A[i] = scan.nextInt();
-//				System.out.println(A[i]);
+				if (scan.hasNextInt()) {
+					A[i] = scan.nextInt();
+				}
+				else {
+					A[i] = 0;
+				}
 			}
 			scan.close();
 			A[5] = playerPoint;
 			Arrays.parallelSort(A);
-			file.delete();
-			file.createNewFile();
+//			file.delete();
+//			file.createNewFile();
 		} catch (Exception e) {
 			System.out.println("File not found");
 		}
 		String s = "" + A[5] + " " + A[4] + " " + A[3] + " " + A[2] + " " + A[1];
 		try {
-			FileWriter fw = new FileWriter("src\\HighScore\\highscore.txt");
+			FileWriter fw = new FileWriter("D:/high.txt");
 			fw.write(s);
 			fw.close();
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
