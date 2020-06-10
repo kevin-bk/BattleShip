@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 public class SmallMap extends JPanel {
 	public JButton mapPiece[][];
 	public boolean isShip[][];
-	public ImageIcon icon;
 
 	public SmallMap(int w, int h) {
 		super();
@@ -27,13 +26,9 @@ public class SmallMap extends JPanel {
 		this.setSize(w, h);
 		this.setLayout(new GridLayout(10, 10)); // tạo GridLayout cho Map
 
-		// load ảnh
-		icon = new ImageIcon(loadImage("src\\img\\mappp.png", w / 10, h / 10));
-
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
 				mapPiece[i][j] = new JButton(); // chưa có action
-//				mapPiece[i][j].setIcon(icon);
 				mapPiece[i][j].setBackground(Color.decode("#114D73"));
 				this.add(mapPiece[i][j]);
 			}

@@ -55,9 +55,7 @@ public class PlayGame extends Container implements ActionListener {
 	private JLabel turnP, turnC, curP, curC, hitP, hitC, pointP, pointC, ratioP, ratioC, shipDeadP, shipDeadC;
 	private JButton back, backIgnore; // quay về menu khi win/lose
 
-	private ImageIcon miss; // bắn trượt
 	private ImageIcon hit; // bắn trúng
-	private ImageIcon dead; // tàu bị phá hoàn toàn
 
 	private static int playerHit = 0, computerHit = 0; // số điểm bắn trúng hiện tại
 	private static int sumPoint; // tổng số điểm ship trên mỗi map
@@ -156,8 +154,6 @@ public class PlayGame extends Container implements ActionListener {
 
 		// tạo image icon
 		hit = new ImageIcon(loadImage("src\\img\\hit.png", w / 20, 56));
-		miss = new ImageIcon(loadImage("src\\img\\miss2.png", w / 20, 56));
-		dead = new ImageIcon(loadImage("src\\img\\Dead.png", w / 20, 56));
 		back = new JButton();
 
 		frame = new JFrame("Battle Ship");
@@ -254,7 +250,6 @@ public class PlayGame extends Container implements ActionListener {
 			computerHit++;
 			return true;
 		} else
-//			playerMap.mapPiece[i][j].setIcon(miss);
 			playerMap.mapPiece[i][j].setFont(new Font("Arial", Font.PLAIN, 30));
 		playerMap.mapPiece[i][j].setForeground(Color.white);
 		playerMap.mapPiece[i][j].setText("X");
@@ -459,6 +454,7 @@ public class PlayGame extends Container implements ActionListener {
 		turnComputer.remove(shipDeadC);
 		turnComputer.remove(ratioC);
 		turnComputer.remove(pointC);
+		turnComputer.remove(backIgnore);
 		turnComputer.setLayout(new GridLayout(2, 1));
 
 		JLabel over = new JLabel("", SwingConstants.CENTER);

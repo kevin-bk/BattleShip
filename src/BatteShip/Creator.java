@@ -57,7 +57,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public static boolean[] isNgang; // tàu nằm ngang hay nằm dọc
 	public static int[] lengShip; // độ dài tàu i
 	public SmallMap playerMap, computerMap;
-
+	
 	public JButton start, back; // nút start và back;
 	public JButton random;
 
@@ -70,7 +70,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 	public static ArrayList<String> B; // lưu tọa độ tàu của computer
 	public Clip clip;
 	public static boolean isPlaySound;
-	
+		
 	public Creator(int w, int h, int numShip3, int numShip2, int numShip1, String gamemode, boolean playSound) {
 		super();
 		this.setSize(w, h);
