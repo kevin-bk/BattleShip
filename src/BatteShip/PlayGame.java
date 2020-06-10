@@ -153,11 +153,11 @@ public class PlayGame extends Container implements ActionListener {
 		this.setSize(w, h);
 
 		// tạo image icon
-		hit = new ImageIcon(loadImage("src\\img\\hit.png", w / 20, 56));
+		hit = new ImageIcon(loadImage("/img/hit.png", w / 20, 56));
 		back = new JButton();
 
 		frame = new JFrame("Battle Ship");
-		frame.setIconImage(loadImage("src\\img\\logo.png", 90, 90));
+		frame.setIconImage(loadImage("/img/logo.png", 90, 90));
 		frame.add(this);
 		frame.setSize(w, h);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -346,7 +346,7 @@ public class PlayGame extends Container implements ActionListener {
 			cnt++;
 			for (int t = 0; t < leng; t++) {
 				computerMap.mapPiece[i][j + t]
-						.setIcon(new ImageIcon(loadImage("src\\img\\" + leng + (t + 1) + ".png", 56, 46)));
+						.setIcon(new ImageIcon(loadImage("/img/" + leng + (t + 1) + ".png", 56, 46)));
 			}
 		}
 		shipDeadByPlayer = cnt;
@@ -373,7 +373,7 @@ public class PlayGame extends Container implements ActionListener {
 			cnt++;
 			for (int t = 0; t < leng; t++) {
 				playerMap.mapPiece[i][j + t]
-						.setIcon(new ImageIcon(loadImage("src\\img\\" + leng + (t + 1) + ".png", 56, 46)));
+						.setIcon(new ImageIcon(loadImage("/img/" + leng + (t + 1) + ".png", 56, 46)));
 			}
 		}
 		shipDeadByComputer = cnt;
@@ -508,7 +508,7 @@ public class PlayGame extends Container implements ActionListener {
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
 		try {
-			i = ImageIO.read(new File(s));
+			i = ImageIO.read(MainMenu.class.getResource(s));
 		} catch (Exception e) {
 			System.out.println("Duong dan anh k hop le!");
 		}

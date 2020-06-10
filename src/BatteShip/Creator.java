@@ -1,12 +1,8 @@
 package BatteShip;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -83,7 +78,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		
 		// shipmap
 		map = new JLabel();
-		map.setIcon(new ImageIcon(loadImage("src\\img\\bigMap.png", 560, 560)));
+		map.setIcon(new ImageIcon(loadImage("/img/bigMap.png", 560, 560)));
 		map.setSize(560, 560);
 		
 		// numShipi = số lượng tàu độ dài i
@@ -142,7 +137,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		init();
 
 		frame = new JFrame("Battle Ship");
-		frame.setIconImage(loadImage("src\\img\\logo.png",90,90));
+		frame.setIconImage(loadImage("/img/logo.png",90,90));
 		frame.add(this);
 		frame.setSize(w, h);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -192,8 +187,8 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		back.setBorder(new LineBorder(Color.decode("#D2EDFE")));
 		start.setBackground(Color.decode("#D2EDFE"));
 		start.setBorder(new LineBorder(Color.decode("#D2EDFE")));
-		back.setIcon(new ImageIcon(loadImage("src\\img\\back.png", 50, 50)));
-		start.setIcon(new ImageIcon(loadImage("src\\img\\next.png", 50, 50)));
+		back.setIcon(new ImageIcon(loadImage("/img/back.png", 50, 50)));
+		start.setIcon(new ImageIcon(loadImage("/img/next.png", 50, 50)));
 
 		random.setFont(new Font("Arial", Font.PLAIN, 30));
 		random.setBackground(Color.decode("#D2EDFE"));
@@ -221,14 +216,14 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		this.add(map);
 
 		this.setLayout(new FlowLayout());
-		this.setIcon(new ImageIcon(loadImage("src\\img\\blue.png", 1120, 690)));
+		this.setIcon(new ImageIcon(loadImage("/img/blue.png", 1120, 690)));
 
 	}
 
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
 		try {
-			i = ImageIO.read(new File(s));
+			i = ImageIO.read(MainMenu.class.getResource(s));
 		} catch (Exception e) {
 			System.out.println("Duong dan anh k hop le!");
 		}
@@ -240,7 +235,6 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 	// đặt thử tàu thứ tmp vào vị trí x,y ứng với ô i,j
 	public boolean put(int tmp, int x, int y, int i, int j) {
-//		System.out.println("i = " + i + " j = " + j);
 
 		int leng = lengShip[tmp];
 
@@ -286,7 +280,6 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 		int v = (Integer.parseInt(A.get(tmp))) / 10000;
 		A.set(tmp, "" + (v * 10000 + i * 100 + j));
 
-//		System.out.println("put ship " + tmp + " leng " + leng + " in " + i + " ," + j);
 		return true;
 	}
 
@@ -342,22 +335,10 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 
 			boolean c = putForRandom(cnt, x, y, i + 1, j + 1, lengShip[cnt], is);
 			if (c) {
-//				System.out.println("Put ship " + cnt + " at " + (i + 1) + ", " + (j + 1));
 				cnt++;
 				Q.remove();
 			}
 		}
-
-//		for (int i = 1; i <= 10; i++) {
-//			for (int j = 1; j <= 10; j++) {
-//				if (M[j][i])
-//					System.out.print("1 ");
-//				else
-//					System.out.print("0 ");
-//			}
-//			System.out.println();
-//		}
-//		System.out.println("================");
 	}
 
 	@Override
@@ -499,7 +480,7 @@ public class Creator extends JLabel implements MouseListener, MouseMotionListene
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
 			clip = AudioSystem.getClip();
 			clip.open(audioIn);
-			clip.loop(clip.LOOP_CONTINUOUSLY);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
 			clip.start();
 		} catch (UnsupportedAudioFileException e) {
 			e.printStackTrace();

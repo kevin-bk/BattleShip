@@ -1,6 +1,5 @@
 package BatteShip;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -14,7 +13,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -27,7 +25,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 public class MainMenu implements ActionListener, MouseListener {
@@ -60,7 +57,7 @@ public class MainMenu implements ActionListener, MouseListener {
 	public MainMenu(int w, int h, boolean playSound) {
 		frame = new JFrame("Battle Ship");
 		isPlaySound = playSound;
-		frame.setIconImage(loadImage("src\\img\\logo.png", 90, 90));
+		frame.setIconImage(loadImage("/img/logo.png", 90, 90));
 		frame.setSize(w, h);
 		welcome = new JLabel();
 		welcome.setSize(w, h);
@@ -68,11 +65,11 @@ public class MainMenu implements ActionListener, MouseListener {
 		play.setSize(30, 20);
 		play.setActionCommand("Play");
 		play.addActionListener(this);
-		ImageIcon playIcon = new ImageIcon(loadImage("src\\img\\play.jpg", 80, 50));
+		ImageIcon playIcon = new ImageIcon(loadImage("/img/play.jpg", 80, 50));
 		play.setIcon(playIcon);
 		play.setBounds(w / 2 - 40, 3 * h / 4, 80, 50);
 
-		introIcon = new ImageIcon(loadImage("src\\img\\Title.png", w, h));
+		introIcon = new ImageIcon(loadImage("/img/Title.png", w, h));
 		welcome.add(play);
 		welcome.setIcon(introIcon);
 		welcome.addMouseListener(this);
@@ -91,12 +88,12 @@ public class MainMenu implements ActionListener, MouseListener {
 	public void menu2() {
 		menu = new JLabel();
 		menu.setSize(1120, 690);
-		menu.setIcon(new ImageIcon(loadImage("src\\img\\blue.png", 1120, 690)));
+		menu.setIcon(new ImageIcon(loadImage("/img/blue.png", 1120, 690)));
 		// nút start
 		start = new JButton("BATTLE");
 		start.setFont(new Font("Arial", Font.PLAIN, 25));
 		start.setBounds(485, 511, 120, 65);
-//		start.setIcon(new ImageIcon(loadImage("src\\img\\buttonStart.png", 120, 65)));
+
 		start.setActionCommand("start");
 		start.addActionListener(this);
 		start.setBackground(Color.decode("#D2EDFE"));
@@ -104,7 +101,7 @@ public class MainMenu implements ActionListener, MouseListener {
 		// nút exit
 		exit = new JButton();
 		exit.setBounds(804, 511, 78, 65);
-		exit.setIcon(new ImageIcon(loadImage("src\\img\\exitRight.png", 78, 65)));
+		exit.setIcon(new ImageIcon(loadImage("/img/exitRight.png", 78, 65)));
 		exit.setActionCommand("exit");
 		exit.addActionListener(this);
 		exit.setBackground(Color.decode("#D2EDFE"));
@@ -113,10 +110,10 @@ public class MainMenu implements ActionListener, MouseListener {
 		sound = new JButton();
 		sound.setBounds(181, 511, 78, 65);
 		if (isPlaySound) {
-			sound.setIcon(new ImageIcon(loadImage("src\\img\\musicOn.png", 78, 65)));
+			sound.setIcon(new ImageIcon(loadImage("/img/musicOn.png", 78, 65)));
 			sound.setActionCommand("sound on");
 		} else {
-			sound.setIcon(new ImageIcon(loadImage("src\\img\\musicOff.png", 78, 65)));
+			sound.setIcon(new ImageIcon(loadImage("/img/musicOff.png", 78, 65)));
 			sound.setActionCommand("sound off");
 		}
 		sound.addActionListener(this);
@@ -126,7 +123,7 @@ public class MainMenu implements ActionListener, MouseListener {
 		gamemode = new JButton("Độ khó: Dễ");
 		gamemode.setBounds(291, 511, 156, 65);
 		gamemode.setFont(new Font("Arial", Font.PLAIN, 25));
-//		gamemode.setIcon(new ImageIcon(loadImage("src\\img\\easy.PNG", 156, 65)));
+
 		gamemode.setActionCommand("easy");
 		gamemode.addActionListener(this);
 		gamemode.setBackground(Color.decode("#D2EDFE"));
@@ -134,7 +131,7 @@ public class MainMenu implements ActionListener, MouseListener {
 		// nút high score
 		highScore = new JButton();
 		highScore.setBounds(643, 511, 100, 65);
-		highScore.setIcon(new ImageIcon(loadImage("src\\img\\trophy.png", 100, 65)));
+		highScore.setIcon(new ImageIcon(loadImage("/img/trophy.png", 100, 65)));
 		highScore.setActionCommand("highScore off");
 		highScore.addActionListener(this);
 		highScore.setBackground(Color.decode("#D2EDFE"));
@@ -182,18 +179,19 @@ public class MainMenu implements ActionListener, MouseListener {
 		welcome.setVisible(false);
 		frame.remove(welcome);
 		frame.add(menu);
+		menu3();
 	}
 
 	// menu chứa lựa chọn số lượng tàu
 	public void menu3() {
 		select = new JLabel();
 		select.setSize(1120, 690);
-		select.setIcon(new ImageIcon(loadImage("src\\img\\blue.png", 1120, 690)));
+		select.setIcon(new ImageIcon(loadImage("/img/blue.png", 1120, 690)));
 		select.addMouseListener(this);
 		ship = new JLabel[4];
 
-		next.setIcon(new ImageIcon(loadImage("src\\img\\arrowRight.png", 50, 50)));
-		back.setIcon(new ImageIcon(loadImage("src\\img\\arrowLeft.png", 50, 50)));
+		next.setIcon(new ImageIcon(loadImage("/img/arrowRight.png", 50, 50)));
+		back.setIcon(new ImageIcon(loadImage("/img/arrowLeft.png", 50, 50)));
 		back.setBounds(70, 552, 50, 50);
 		next.setBounds(990, 552, 50, 50);
 		next.addActionListener(this);
@@ -202,7 +200,7 @@ public class MainMenu implements ActionListener, MouseListener {
 		for (int i = 1; i < ship.length; i++) {
 			ship[i] = new JLabel();
 //			numShip[i] = new JButton();
-			ship[i].setIcon(new ImageIcon(loadImage("src\\img\\" + i + ".png", i * 100, 100)));
+			ship[i].setIcon(new ImageIcon(loadImage("/img/" + i + ".png", i * 100, 100)));
 		}
 
 		ship[1].setBounds(500, 180, 100, 100);
@@ -220,9 +218,9 @@ public class MainMenu implements ActionListener, MouseListener {
 		select.add(back);
 		select.add(next);
 
-		menu.setVisible(false);
-		frame.remove(menu);
-		frame.add(select);
+//		menu.setVisible(false);
+//		frame.remove(menu);
+//		frame.add(select);
 	}
 
 	private void showHighScore() {
@@ -263,7 +261,7 @@ public class MainMenu implements ActionListener, MouseListener {
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
 		try {
-			i = ImageIO.read(new File(s));
+			i = ImageIO.read(MainMenu.class.getResource(s));
 		} catch (Exception e) {
 			System.out.println("Duong dan anh k hop le!");
 		}
@@ -279,7 +277,7 @@ public class MainMenu implements ActionListener, MouseListener {
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
 			clip = AudioSystem.getClip();
 			clip.open(audioIn);
-			clip.loop(clip.LOOP_CONTINUOUSLY);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
 			clip.start();
 		} catch (UnsupportedAudioFileException e) {
 			e.printStackTrace();
@@ -302,22 +300,25 @@ public class MainMenu implements ActionListener, MouseListener {
 		}
 
 		if ("sound on".equals(e.getActionCommand())) {
-			sound.setIcon(new ImageIcon(loadImage("src\\img\\musicOff.png", 78, 65)));
+			sound.setIcon(new ImageIcon(loadImage("/img/musicOff.png", 78, 65)));
 			sound.setActionCommand("sound off");
 			isPlaySound = false;
 			clip.stop();
 		}
 
 		if ("sound off".equals(e.getActionCommand())) {
-			sound.setIcon(new ImageIcon(loadImage("src\\img\\musicOn.png", 78, 65)));
+			sound.setIcon(new ImageIcon(loadImage("/img/musicOn.png", 78, 65)));
 			sound.setActionCommand("sound on");
 			clip.start();
-			clip.loop(clip.LOOP_CONTINUOUSLY);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
 			isPlaySound = true;
 		}
 
 		if ("start".equals(e.getActionCommand())) {
-			menu3();
+			menu.setVisible(false);
+			frame.remove(menu);
+			frame.add(select);
+			select.setVisible(true);
 		}
 
 		if ("highScore off".equals(e.getActionCommand())) {
@@ -332,13 +333,11 @@ public class MainMenu implements ActionListener, MouseListener {
 		
 		if ("easy".equals(e.getActionCommand())) {
 			gamemode.setText("Độ khó: Khó");
-//			gamemode.setIcon(new ImageIcon(loadImage("src\\img\\hard.PNG", 156, 65)));
 			gamemode.setActionCommand("hard");
 		}
 
 		if ("hard".equals(e.getActionCommand())) {
 			gamemode.setText("Độ khó: Dễ");
-//			gamemode.setIcon(new ImageIcon(loadImage("src\\img\\easy.PNG", 156, 65)));
 			gamemode.setActionCommand("easy");
 		}
 
@@ -383,7 +382,7 @@ public class MainMenu implements ActionListener, MouseListener {
 			int n1 = Integer.parseInt(numShip[1].getText());
 			int n2 = Integer.parseInt(numShip[2].getText());
 			int n3 = Integer.parseInt(numShip[3].getText());
-			clip.stop();
+			this.clip.stop();
 			creator = new Creator(1120, 690, n3, n2, n1, gamemode.getActionCommand(), isPlaySound);
 			creator.back.setActionCommand("back");
 			creator.back.addActionListener(this);
@@ -391,8 +390,11 @@ public class MainMenu implements ActionListener, MouseListener {
 		}
 
 		if ("back".equals(e.getActionCommand())) {
-			creator.frame.setVisible(false);
 			creator.clip.stop();
+			creator.frame.setVisible(false);
+			
+			creator = null;
+			System.gc();
 			frame.setVisible(true);
 			if (isPlaySound) {
 			clip.start();

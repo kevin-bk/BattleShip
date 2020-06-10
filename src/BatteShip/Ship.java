@@ -12,13 +12,13 @@ public class Ship {
 	public Ship(int length, int w, int h) {
 
 		if (length == 3) {
-			ship = loadImage("src\\img\\3.png", w, h);
+			ship = loadImage("/img/3.png", w, h);
 		}
 		if (length == 2) {
-			ship = loadImage("src\\img\\2.png", w, h);
+			ship = loadImage("/img/2.png", w, h);
 		}
 		if (length == 1) {
-			ship = loadImage("src\\img\\1.png", w, h);
+			ship = loadImage("/img/1.png", w, h);
 		}
 	}
 
@@ -29,7 +29,7 @@ public class Ship {
 	private Image loadImage(String s, int w, int h) {
 		BufferedImage i = null; // doc anh duoi dang Buffered Image
 		try {
-			i = ImageIO.read(new File(s));
+			i = ImageIO.read(MainMenu.class.getResource(s));
 		} catch (Exception e) {
 			System.out.println("Duong dan anh k hop le!");
 		}

@@ -44,19 +44,4 @@ public class SmallMap extends JPanel {
 		}
 	}
 
-
-	private Image loadImage(String s, int w, int h) {
-		BufferedImage i = null; // doc anh duoi dang Buffered Image
-		try {
-			i = ImageIO.read(new File(s));
-		} catch (Exception e) {
-			System.out.println("Duong dan anh k hop le!");
-		}
-
-		Image dimg = i.getScaledInstance(w, h, Image.SCALE_SMOOTH); // thay doi kich thuoc anh
-		return dimg;
-
-	}
-
-
 }
